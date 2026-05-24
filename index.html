@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Digital Learning Ecosystem</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="phone-shell">
+      <section id="screen-login" class="screen auth-screen is-active" aria-labelledby="login-title">
+        <div class="brand-mark">SD</div>
+        <p class="eyebrow">Smart Digital Learning Ecosystem</p>
+        <h1 id="login-title">ระบบเดียวจบสำหรับครูวิทยาการคำนวณ</h1>
+        <p class="lead">จัดการสอน วัดผล สื่อสาร และเก็บหลักฐาน ว PA ในมือถือเครื่องเดียว</p>
+
+        <form class="login-form">
+          <label>
+            อีเมลหรือรหัสครู
+            <input type="text" value="teacher@school.ac.th" />
+          </label>
+          <label>
+            รหัสผ่าน
+            <input type="password" value="12345678" />
+          </label>
+          <button class="wide-button" type="button" data-go="role">เข้าสู่ระบบ</button>
+        </form>
+
+        <button class="ghost-button" type="button" data-go="home">ทดลองเข้าใช้งานทันที</button>
+      </section>
+
+      <section id="screen-role" class="screen" aria-labelledby="role-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="login" aria-label="ย้อนกลับ">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+          </button>
+          <div>
+            <p class="eyebrow">เลือกมุมมอง</p>
+            <h1 id="role-title">วันนี้คุณใช้งานในบทบาทใด</h1>
+          </div>
+        </div>
+
+        <div class="role-list">
+          <button type="button" data-role="teacher" data-go="home">
+            <span class="role-icon teacher">ค</span>
+            <span>
+              <strong>ครูผู้สอน</strong>
+              <small>สร้างบทเรียน ตรวจงาน และเก็บหลักฐาน ว PA</small>
+            </span>
+          </button>
+          <button type="button" data-role="student" data-go="student">
+            <span class="role-icon student">นร</span>
+            <span>
+              <strong>นักเรียน</strong>
+              <small>เข้าเรียน ดูงาน ส่งงาน และตรวจคะแนน</small>
+            </span>
+          </button>
+          <button type="button" data-role="parent" data-go="parent">
+            <span class="role-icon parent">ผป</span>
+            <span>
+              <strong>ผู้ปกครอง</strong>
+              <small>ติดตามคะแนน การเข้าเรียน และประกาศจากครู</small>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section id="app-shell" class="app-shell">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="role-label">ครูวิทยาการคำนวณ</p>
+            <h1>ระบบจัดการเรียนรู้ + ว PA</h1>
+          </div>
+          <button class="icon-button" aria-label="การแจ้งเตือน" data-action="notify">
+            <span>3</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+              <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+            </svg>
+          </button>
+        </header>
+
+        <section class="profile-strip">
+          <div class="avatar">สท</div>
+          <div>
+            <strong>นางสาวสุนิสา เทคโนโลยี</strong>
+            <p>ม.2/1 วิทยาการคำนวณ | ภาคเรียน 1/2569</p>
+          </div>
+        </section>
+
+        <section id="view-home" class="view is-active" aria-labelledby="home-title">
+          <div class="section-heading">
+            <h2 id="home-title">ภาพรวมวันนี้</h2>
+            <button class="text-button" data-go="report">ดูรายงาน</button>
+          </div>
+
+          <div class="stats-grid">
+            <article><span class="stat-value">36</span><span class="stat-label">นักเรียน</span></article>
+            <article><span class="stat-value">5</span><span class="stat-label">งานรอตรวจ</span></article>
+            <article><span class="stat-value">91%</span><span class="stat-label">เข้าเรียน</span></article>
+            <article><span class="stat-value">18</span><span class="stat-label">หลักฐาน ว PA</span></article>
+          </div>
+
+          <div class="quick-actions" aria-label="เมนูลัด">
+            <button data-go="attendance">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
+              เช็กชื่อ
+            </button>
+            <button data-go="assignment">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
+              สร้างงาน
+            </button>
+            <button data-go="evidence">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M9 15h6" /></svg>
+              เก็บ ว PA
+            </button>
+          </div>
+
+          <article class="lesson-card" data-go="class-detail">
+            <div>
+              <p class="eyebrow">คาบถัดไป 10:20</p>
+              <h3>อัลกอริทึมและการแก้ปัญหา</h3>
+              <p>กิจกรรม: ออกแบบผังงานแก้โจทย์ชีวิตประจำวัน</p>
+            </div>
+            <div class="progress-ring" aria-label="ความพร้อม 78 เปอร์เซ็นต์">78%</div>
+          </article>
+
+          <div class="section-heading">
+            <h2>ต้องติดตาม</h2>
+            <button class="text-button" data-action="follow">ทั้งหมด</button>
+          </div>
+
+          <div class="follow-list">
+            <article><span class="status-dot warning"></span><div><strong>ด.ช.ปกรณ์</strong><p>ยังไม่ส่งใบงาน Scratch รอบที่ 2</p></div></article>
+            <article><span class="status-dot danger"></span><div><strong>ด.ญ.ณิชา</strong><p>ขาดเรียน 2 ครั้งในหน่วยนี้ แจ้งผู้ปกครองแล้ว</p></div></article>
+          </div>
+        </section>
+
+        <section id="view-class" class="view" aria-labelledby="class-title">
+          <div class="section-heading">
+            <h2 id="class-title">ห้องเรียน</h2>
+            <button class="text-button" data-go="class-detail">รายละเอียด</button>
+          </div>
+
+          <article class="course-hero" data-go="class-detail">
+            <p class="eyebrow">ม.2/1 | 2 หน่วยกำลังสอน</p>
+            <h2>วิทยาการคำนวณ</h2>
+            <p>มาตรฐาน ว 4.2 ใช้แนวคิดเชิงคำนวณแก้ปัญหาอย่างเป็นขั้นตอน</p>
+          </article>
+
+          <div class="unit-list">
+            <article class="unit-card" data-go="class-detail"><div class="unit-icon code">01</div><div><h3>แนวคิดเชิงคำนวณ</h3><p>4 บทเรียน | 2 งาน | คะแนนเฉลี่ย 82%</p><div class="bar"><span style="width: 72%"></span></div></div></article>
+            <article class="unit-card"><div class="unit-icon data">02</div><div><h3>การเขียนโปรแกรม Scratch</h3><p>5 บทเรียน | 3 งาน | คะแนนเฉลี่ย 76%</p><div class="bar"><span style="width: 54%"></span></div></div></article>
+            <article class="unit-card"><div class="unit-icon safety">03</div><div><h3>ความปลอดภัยดิจิทัล</h3><p>ร่างแผนแล้ว | รอสื่อประกอบ</p><div class="bar"><span style="width: 22%"></span></div></div></article>
+          </div>
+        </section>
+
+        <section id="view-work" class="view" aria-labelledby="work-title">
+          <div class="section-heading">
+            <h2 id="work-title">งานและการประเมิน</h2>
+            <button class="primary-small" data-go="assignment">สร้างงาน</button>
+          </div>
+
+          <div class="segmented" role="tablist" aria-label="สถานะงาน">
+            <button class="is-selected" type="button">รอตรวจ</button>
+            <button type="button">กำลังส่ง</button>
+            <button type="button">เสร็จแล้ว</button>
+          </div>
+
+          <article class="assignment-card" data-go="assignment">
+            <div class="assignment-top"><span class="pill urgent">ครบกำหนดวันนี้</span><span>ส่งแล้ว 31/36</span></div>
+            <h3>ใบงาน: แยกปัญหาเป็นขั้นตอน</h3>
+            <p>ตรวจด้วย rubric 4 ระดับ และเลือกหลักฐานเข้า ว PA ได้ทันที</p>
+            <button class="wide-button" data-go="review">ตรวจงาน 5 รายการ</button>
+          </article>
+
+          <article class="assignment-card">
+            <div class="assignment-top"><span class="pill normal">แบบทดสอบ</span><span>ค่าเฉลี่ย 8.4/10</span></div>
+            <h3>Pre-test: อัลกอริทึม</h3>
+            <p>ระบบแนะนำกลุ่มเสริม 7 คน จากข้อที่ผิดซ้ำ</p>
+            <button class="wide-button secondary" data-action="score">ดูวิเคราะห์คะแนน</button>
+          </article>
+        </section>
+
+        <section id="view-pa" class="view" aria-labelledby="pa-title">
+          <div class="section-heading">
+            <h2 id="pa-title">ว PA Portfolio</h2>
+            <button class="primary-small" data-go="evidence">เพิ่มหลักฐาน</button>
+          </div>
+
+          <article class="pa-summary">
+            <div>
+              <p class="eyebrow">ปีการศึกษา 2569</p>
+              <h2>หลักฐานพร้อมใช้ 18 รายการ</h2>
+              <p>เชื่อมโยงแผนการสอน กิจกรรม ผลงาน และผลลัพธ์ผู้เรียน</p>
+            </div>
+            <span>72%</span>
+          </article>
+
+          <div class="evidence-list">
+            <article><div class="evidence-type planning"></div><div><strong>แผนการสอนหน่วยแนวคิดเชิงคำนวณ</strong><p>หมวด: การออกแบบการเรียนรู้ | ไฟล์ PDF</p></div></article>
+            <article><div class="evidence-type activity"></div><div><strong>ภาพกิจกรรมกลุ่มออกแบบผังงาน</strong><p>หมวด: การจัดกิจกรรม | 12 รูป</p></div></article>
+            <article><div class="evidence-type outcome"></div><div><strong>กราฟคะแนนก่อน-หลังเรียน</strong><p>หมวด: ผลลัพธ์ผู้เรียน | ค่าเฉลี่ยเพิ่ม 21%</p></div></article>
+          </div>
+
+          <button class="export-button" data-go="report">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M7 10l5 5 5-5" /><path d="M12 15V3" /></svg>
+            Preview รายงาน ว PA
+          </button>
+        </section>
+
+        <nav class="bottom-nav" aria-label="เมนูหลัก">
+          <button class="is-active" data-view="home" aria-label="หน้าแรก"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5" /><path d="M5 10v10h14V10" /></svg><span>หน้าแรก</span></button>
+          <button data-view="class" aria-label="ห้องเรียน"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" /></svg><span>ห้องเรียน</span></button>
+          <button data-view="work" aria-label="งาน"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg><span>งาน</span></button>
+          <button data-view="pa" aria-label="ว PA"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M8 13h8" /></svg><span>ว PA</span></button>
+        </nav>
+      </section>
+
+      <section id="screen-class-detail" class="screen detail-screen" aria-labelledby="class-detail-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="home" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">รายละเอียดห้องเรียน</p><h1 id="class-detail-title">ม.2/1 วิทยาการคำนวณ</h1></div>
+        </div>
+        <div class="info-grid">
+          <article><strong>36</strong><span>นักเรียน</span></article>
+          <article><strong>82%</strong><span>คะแนนเฉลี่ย</span></article>
+          <article><strong>91%</strong><span>เข้าเรียน</span></article>
+        </div>
+        <article class="panel">
+          <h2>หน่วยที่กำลังสอน</h2>
+          <p>แนวคิดเชิงคำนวณ: แยกปัญหา ระบุรูปแบบ สร้างขั้นตอน และทดสอบวิธีแก้ปัญหา</p>
+          <button class="wide-button" data-go="assignment">สร้างงานจากหน่วยนี้</button>
+        </article>
+        <article class="panel">
+          <h2>นักเรียนที่ควรติดตาม</h2>
+          <div class="student-row"><span>ปกรณ์</span><strong>ยังไม่ส่งงาน</strong></div>
+          <div class="student-row"><span>ณิชา</span><strong>ขาดเรียน 2 ครั้ง</strong></div>
+          <div class="student-row"><span>ธันวา</span><strong>คะแนนหลังเรียนเพิ่ม 34%</strong></div>
+        </article>
+      </section>
+
+      <section id="screen-assignment" class="screen detail-screen" aria-labelledby="assignment-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="app-work" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">รายละเอียดงาน</p><h1 id="assignment-title">ใบงาน: แยกปัญหาเป็นขั้นตอน</h1></div>
+        </div>
+        <article class="panel">
+          <div class="assignment-top"><span class="pill urgent">ครบกำหนดวันนี้</span><span>20 คะแนน</span></div>
+          <p>ให้นักเรียนเลือกปัญหาในชีวิตประจำวัน 1 เรื่อง แล้วเขียนขั้นตอนการแก้ปัญหาเป็นลำดับ พร้อมอธิบายเหตุผล</p>
+        </article>
+        <div class="info-grid">
+          <article><strong>31</strong><span>ส่งแล้ว</span></article>
+          <article><strong>5</strong><span>รอตรวจ</span></article>
+          <article><strong>4</strong><span>ยังไม่ส่ง</span></article>
+        </div>
+        <article class="panel">
+          <h2>Rubric</h2>
+          <div class="rubric-row"><span>แยกปัญหาได้ชัดเจน</span><strong>4</strong></div>
+          <div class="rubric-row"><span>ลำดับขั้นตอนถูกต้อง</span><strong>4</strong></div>
+          <div class="rubric-row"><span>อธิบายเหตุผลได้</span><strong>4</strong></div>
+          <button class="wide-button" data-go="review">เริ่มตรวจงาน</button>
+        </article>
+      </section>
+
+      <section id="screen-review" class="screen detail-screen" aria-labelledby="review-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="assignment" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">ตรวจงาน</p><h1 id="review-title">ด.ช.ปกรณ์ | ใบงานขั้นตอน</h1></div>
+        </div>
+        <article class="submission-preview">
+          <div class="file-thumb">PDF</div>
+          <div><strong>algorithm_steps_pakorn.pdf</strong><p>ส่งวันนี้ 08:42 | มีรูปผังงานแนบ 1 รูป</p></div>
+        </article>
+        <article class="panel">
+          <h2>ให้คะแนน</h2>
+          <label class="score-control">แยกปัญหาได้ชัดเจน <input type="range" min="1" max="4" value="3" /></label>
+          <label class="score-control">ลำดับขั้นตอนถูกต้อง <input type="range" min="1" max="4" value="4" /></label>
+          <label class="score-control">อธิบายเหตุผลได้ <input type="range" min="1" max="4" value="3" /></label>
+          <textarea rows="4">ทำได้ดีขึ้น ลองเพิ่มเหตุผลในแต่ละขั้นตอนให้ชัดขึ้นอีกนิด</textarea>
+          <button class="wide-button" data-go="evidence">บันทึกคะแนนและเก็บเป็นหลักฐาน ว PA</button>
+        </article>
+      </section>
+
+      <section id="screen-evidence" class="screen detail-screen" aria-labelledby="evidence-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="app-pa" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">เพิ่มหลักฐาน</p><h1 id="evidence-title">บันทึกเข้า ว PA Portfolio</h1></div>
+        </div>
+        <article class="panel">
+          <label>ชื่อหลักฐาน <input type="text" value="ผลงานนักเรียน: การแยกปัญหาเป็นขั้นตอน" /></label>
+          <label>หมวดหลักฐาน
+            <select>
+              <option>ผลลัพธ์ผู้เรียน</option>
+              <option>การจัดกิจกรรมการเรียนรู้</option>
+              <option>การออกแบบการเรียนรู้</option>
+              <option>การดูแลช่วยเหลือนักเรียน</option>
+            </select>
+          </label>
+          <label>เชื่อมโยงตัวชี้วัด <input type="text" value="ว 4.2 ม.2/1" /></label>
+          <label>คำอธิบาย <textarea rows="4">ใช้เป็นหลักฐานแสดงพัฒนาการด้านแนวคิดเชิงคำนวณและการแก้ปัญหาอย่างเป็นขั้นตอน</textarea></label>
+          <button class="wide-button" data-action="saved-evidence">บันทึกหลักฐาน</button>
+        </article>
+      </section>
+
+      <section id="screen-report" class="screen detail-screen" aria-labelledby="report-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="app-pa" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">Preview รายงาน</p><h1 id="report-title">รายงานหลักฐาน ว PA</h1></div>
+        </div>
+        <article class="report-card">
+          <h2>นวัตกรรม: ระบบจัดการเรียนรู้ดิจิทัล</h2>
+          <p>ครูผู้สอน: นางสาวสุนิสา เทคโนโลยี | วิทยาการคำนวณ ม.2</p>
+          <div class="report-metrics">
+            <span><strong>18</strong> หลักฐาน</span>
+            <span><strong>21%</strong> คะแนนเพิ่ม</span>
+            <span><strong>91%</strong> เข้าเรียน</span>
+          </div>
+          <h3>หลักฐานเด่น</h3>
+          <p>แผนการสอน, ภาพกิจกรรม, ผลงานนักเรียน, กราฟก่อน-หลังเรียน และบันทึกสะท้อนผลหลังสอน</p>
+        </article>
+        <button class="export-button" data-action="export">Export PDF</button>
+      </section>
+
+      <section id="screen-attendance" class="screen detail-screen" aria-labelledby="attendance-title">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="home" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">เช็กชื่อ</p><h1 id="attendance-title">ม.2/1 คาบ 10:20</h1></div>
+        </div>
+        <div class="attendance-list">
+          <article><span>ปกรณ์</span><button class="present">มา</button><button>ลา</button><button>ขาด</button></article>
+          <article><span>ณิชา</span><button>มา</button><button>ลา</button><button class="absent">ขาด</button></article>
+          <article><span>ธันวา</span><button class="present">มา</button><button>ลา</button><button>ขาด</button></article>
+        </div>
+        <button class="wide-button" data-action="attendance-saved">บันทึกและแจ้งผู้ปกครองที่เกี่ยวข้อง</button>
+      </section>
+
+      <section id="screen-student" class="screen detail-screen">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="role" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">มุมมองนักเรียน</p><h1>งานของฉัน</h1></div>
+        </div>
+        <article class="panel"><h2>ใบงาน: แยกปัญหาเป็นขั้นตอน</h2><p>ครบกำหนดวันนี้ | ส่งแล้ว รอครูตรวจ</p></article>
+        <article class="panel"><h2>คะแนนล่าสุด</h2><p>Pre-test อัลกอริทึม 8/10 | ครูแนะนำให้ทบทวนข้อ 4</p></article>
+      </section>
+
+      <section id="screen-parent" class="screen detail-screen">
+        <div class="simple-top">
+          <button class="back-button" type="button" data-go="role" aria-label="ย้อนกลับ"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg></button>
+          <div><p class="eyebrow">มุมมองผู้ปกครอง</p><h1>ความก้าวหน้าบุตรหลาน</h1></div>
+        </div>
+        <article class="panel"><h2>ด.ช.ปกรณ์</h2><p>เข้าเรียน 89% | มีงานรอส่ง 1 งาน | คะแนนเฉลี่ย 78%</p></article>
+        <article class="panel"><h2>ประกาศจากครู</h2><p>ขอให้นักเรียนส่งใบงาน Scratch รอบที่ 2 ภายในวันศุกร์นี้</p></article>
+      </section>
+
+      <div class="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
