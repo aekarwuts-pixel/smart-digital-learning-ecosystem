@@ -37,6 +37,109 @@ export function AssignmentClient({
     Record<string, { score: number; feedback: string; exportToPa: boolean }>
   >({});
 
+  // Rubric states: student_id -> { decomp: number; algo: number; solve: number }
+  const [rubricStates, setRubricStates] = useState<
+    Record<string, { decomp: number; algo: number; solve: number }>
+  >({});
+
+  // Helper to parse existing rubrics from text feedback
+  function parseFeedbackRubric(feedback: string | null) {
+    const result = { decomp: 0, algo: 0, solve: 0 };
+    if (!feedback) return result;
+    
+    const decompMatch = feedback.match(/(?:Decomposition|การวิเคราะห์แยกแยะปัญหา):\s*(\d)\/4/i);
+    const algoMatch = feedback.match(/(?:Algorithm|การเขียนขั้นตอนวิธี):\s*(\d)\/4/i);
+    const solveMatch = feedback.match(/(?:Problem Solving|การแก้ปัญหาและการสะท้อนผล):\s*(\d)\/4/i);
+    
+    if (decompMatch) result.decomp = parseInt(decompMatch[1], 10);
+    if (algoMatch) result.algo = parseInt(algoMatch[1], 10);
+    if (solveMatch) result.solve = parseInt(solveMatch[1], 10);
+    
+    return result;
+  }
+
+  function getRubricState(studentId: string, initialSub: StudentSubmissionItem | undefined) {
+    if (rubricStates[studentId]) {
+      return rubricStates[studentId];
+    }
+    return parseFeedbackRubric(initialSub?.teacher_feedback ?? "");
+  }
+
+  function handleRubricClick(
+    studentId: string,
+    criterion: "decomp" | "algo" | "solve",
+    value: number,
+    item: StudentSubmissionItem,
+    maxScore: number
+  ) {
+    const currentRubric = getRubricState(studentId, item);
+    const newRubric = {
+      ...currentRubric,
+      [criterion]: value
+    };
+    
+    setRubricStates((prev) => ({
+      ...prev,
+      [studentId]: newRubric
+    }));
+
+    const sum = newRubric.decomp + newRubric.algo + newRubric.solve;
+    // Scale score directly: round((sum / 12) * maxScore)
+    const calculatedScore = Math.round((sum / 12) * maxScore);
+    
+    // Auto-generate feedback comment based on selected criteria
+    const descriptors = {
+      decomp: [
+        "",
+        "ต้องการปรับปรุงการวิเคราะห์แจกแจงประเด็นปัญหา",
+        "สามารถระบุประเด็นปัญหาหลักได้พอใช้",
+        "วิเคราะห์และจำแนกประเด็นปัญหาได้ดี",
+        "วิเคราะห์แยกแยะปัญหาและระบุองค์ประกอบสำคัญได้อย่างดีเยี่ยม"
+      ],
+      algo: [
+        "",
+        "การลำดับขั้นตอนวิธีหรือแผนผังยังมีจุดผิดพลาดสำคัญ",
+        "เขียนขั้นตอนวิธีอธิบายขั้นตอนการแก้ปัญหาหลักได้พอใช้",
+        "ออกแบบขั้นตอนวิธีได้เป็นระบบและถูกต้องเป็นส่วนใหญ่",
+        "วางลำดับขั้นตอนวิธีแก้ปัญหาได้อย่างเป็นขั้นตอน ครบถ้วน และมีประสิทธิภาพดีเยี่ยม"
+      ],
+      solve: [
+        "",
+        "การแก้ไขจุดผิดพลาดและสะท้อนผลการทดสอบต้องได้รับการแนะนำ",
+        "สามารถแก้ปัญหาเฉพาะหน้าและปรับเปลี่ยนวิธีการได้บางส่วน",
+        "มีทักษะการตรวจสอบความถูกต้องและแก้ไขปัญหาได้ดี",
+        "สามารถทดสอบ ประเมินผล และปรับปรุงจุดผิดพลาดได้อย่างมีวิจารณญาณดีเยี่ยม"
+      ]
+    };
+
+    let rubricsText = "[เกณฑ์การประเมินรูบริกส์]\n";
+    rubricsText += `· การวิเคราะห์แยกแยะปัญหา: ${newRubric.decomp > 0 ? `${newRubric.decomp}/4` : "-/4"}\n`;
+    rubricsText += `· การเขียนขั้นตอนวิธี: ${newRubric.algo > 0 ? `${newRubric.algo}/4` : "-/4"}\n`;
+    rubricsText += `· การแก้ปัญหาและการสะท้อนผล: ${newRubric.solve > 0 ? `${newRubric.solve}/4` : "-/4"}\n\n`;
+
+    const comments: string[] = [];
+    if (newRubric.decomp > 0) comments.push(descriptors.decomp[newRubric.decomp]);
+    if (newRubric.algo > 0) comments.push(descriptors.algo[newRubric.algo]);
+    if (newRubric.solve > 0) comments.push(descriptors.solve[newRubric.solve]);
+
+    let finalFeedback = rubricsText;
+    if (comments.length > 0) {
+      finalFeedback += `จุดเด่น/จุดพัฒนาที่พบ:\n- ${comments.join("\n- ")}`;
+    }
+
+    setGradingStates((prev) => {
+      const currentGrading = prev[studentId] || { score: 0, feedback: "", exportToPa: false };
+      return {
+        ...prev,
+        [studentId]: {
+          ...currentGrading,
+          score: calculatedScore,
+          feedback: finalFeedback
+        }
+      };
+    });
+  }
+
   // Search filter query
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -372,6 +475,105 @@ export function AssignmentClient({
                     </div>
                   )}
 
+                  {/* Rubric Selector */}
+                  {currentAssignment && (
+                    <div style={style.rubricsContainer}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                        <strong style={{ fontSize: "12.5px", color: "#4f46e5", display: "flex", alignItems: "center", gap: "4px" }}>
+                          📊 เกณฑ์รูบริกส์ประเมินผล วPA
+                        </strong>
+                        <span style={{ fontSize: "11px", color: "#64748b" }}>คลิกเลือกเกณฑ์เพื่อคำนวณคะแนนและข้อเสนอแนะ</span>
+                      </div>
+
+                      {/* Decomp Criterion */}
+                      <div style={style.rubricRowItem}>
+                        <span style={style.rubricRowLabel}>1. การวิเคราะห์แยกปัญหา (Decomposition)</span>
+                        <div style={style.rubricBtnGroup}>
+                          {[1, 2, 3, 4].map((v) => {
+                            const currentRubric = getRubricState(item.student_id, item);
+                            return (
+                              <button
+                                key={v}
+                                type="button"
+                                style={{
+                                  ...style.rubricBtn,
+                                  ...(currentRubric.decomp === v ? style.rubricBtnActive : {})
+                                }}
+                                onClick={() => handleRubricClick(item.student_id, "decomp", v, item, currentAssignment.max_score)}
+                                title={
+                                  v === 4 ? "ดีเยี่ยม: แยกแยะปัญหาได้ชัดเจนทุกจุด" :
+                                  v === 3 ? "ดี: ระบุปัญหาหลักได้ถูกต้อง" :
+                                  v === 2 ? "พอใช้: ขาดรายละเอียดบางส่วน" :
+                                  "ปรับปรุง: วิเคราะห์ปัญหาไม่สำเร็จ"
+                                }
+                              >
+                                {v}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Algo Criterion */}
+                      <div style={style.rubricRowItem}>
+                        <span style={style.rubricRowLabel}>2. การเขียนขั้นตอนวิธี (Algorithm)</span>
+                        <div style={style.rubricBtnGroup}>
+                          {[1, 2, 3, 4].map((v) => {
+                            const currentRubric = getRubricState(item.student_id, item);
+                            return (
+                              <button
+                                key={v}
+                                type="button"
+                                style={{
+                                  ...style.rubricBtn,
+                                  ...(currentRubric.algo === v ? style.rubricBtnActive : {})
+                                }}
+                                onClick={() => handleRubricClick(item.student_id, "algo", v, item, currentAssignment.max_score)}
+                                title={
+                                  v === 4 ? "ดีเยี่ยม: เรียงลำดับถูกต้อง ไม่มีจุดผิด" :
+                                  v === 3 ? "ดี: เขียนลำดับหลักๆ ถูกต้อง" :
+                                  v === 2 ? "พอใช้: เรียงขั้นตอนสับสนบางส่วน" :
+                                  "ปรับปรุง: ไม่มีการวางขั้นตอน"
+                                }
+                              >
+                                {v}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Solve Criterion */}
+                      <div style={style.rubricRowItem}>
+                        <span style={style.rubricRowLabel}>3. การแก้ปัญหาและสะท้อนผล (Solving)</span>
+                        <div style={style.rubricBtnGroup}>
+                          {[1, 2, 3, 4].map((v) => {
+                            const currentRubric = getRubricState(item.student_id, item);
+                            return (
+                              <button
+                                key={v}
+                                type="button"
+                                style={{
+                                  ...style.rubricBtn,
+                                  ...(currentRubric.solve === v ? style.rubricBtnActive : {})
+                                }}
+                                onClick={() => handleRubricClick(item.student_id, "solve", v, item, currentAssignment.max_score)}
+                                title={
+                                  v === 4 ? "ดีเยี่ยม: แก้จุดผิดและทดสอบได้อย่างเป็นระบบ" :
+                                  v === 3 ? "ดี: ตรวจสอบและแก้ปัญหาได้ดี" :
+                                  v === 2 ? "พอใช้: ปรับปรุงตามคำแนะนำได้บางส่วน" :
+                                  "ปรับปรุง: ละเลยจุดผิดพลาดหลัก"
+                                }
+                              >
+                                {v}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Grading Form Panel */}
                   <div style={style.gradingForm}>
                     <div style={style.gradingInputsRow}>
@@ -403,22 +605,20 @@ export function AssignmentClient({
                       </label>
                     </div>
 
-                    {/* Export to PA Checkbox */}
-                    {hasSubmitted && (
-                      <div style={style.checkboxWrapper}>
-                        <label style={style.checkboxLabel}>
-                          <input
-                            type="checkbox"
-                            style={style.checkbox}
-                            checked={currentGrading.exportToPa}
-                            onChange={(e) =>
-                              updateGradingField(item.student_id, "exportToPa", e.target.checked)
-                            }
-                          />
-                          <span>🏆 ส่งออกผลสัมฤทธิ์เข้านวัตกรรม วPA</span>
-                        </label>
-                      </div>
-                    )}
+                    {/* Export to PA Checkbox - Always display to support offline graded exports */}
+                    <div style={style.checkboxWrapper}>
+                      <label style={style.checkboxLabel}>
+                        <input
+                          type="checkbox"
+                          style={style.checkbox}
+                          checked={currentGrading.exportToPa}
+                          onChange={(e) =>
+                            updateGradingField(item.student_id, "exportToPa", e.target.checked)
+                          }
+                        />
+                        <span>🏆 ส่งออกผลสัมฤทธิ์เข้านวัตกรรม วPA</span>
+                      </label>
+                    </div>
 
                     {!item.submission_id && !isDemo && (
                       <p style={{ fontSize: "11px", color: "#e03131", margin: "4px 0 0" }}>
@@ -699,5 +899,49 @@ const style: Record<string, React.CSSProperties> = {
     zIndex: 999,
     boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
     whiteSpace: "nowrap"
+  },
+  rubricsContainer: {
+    background: "#f8fafc",
+    border: "1px solid #e2e8f0",
+    borderRadius: "12px",
+    padding: "10px",
+    marginBottom: "10px"
+  },
+  rubricRowItem: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "6px 0",
+    borderBottom: "1px solid #f1f5f9"
+  },
+  rubricRowLabel: {
+    fontSize: "12px",
+    fontWeight: 600,
+    color: "#334155"
+  },
+  rubricBtnGroup: {
+    display: "flex",
+    gap: "4px"
+  },
+  rubricBtn: {
+    width: "28px",
+    height: "28px",
+    borderRadius: "6px",
+    border: "1px solid #cbd5e1",
+    background: "#fff",
+    color: "#475569",
+    fontSize: "12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.15s ease"
+  },
+  rubricBtnActive: {
+    background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+    color: "#fff",
+    border: "none",
+    boxShadow: "0 2px 6px rgba(99,102,241,0.3)"
   }
 };

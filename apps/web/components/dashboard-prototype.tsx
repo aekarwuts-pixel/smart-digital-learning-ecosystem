@@ -120,7 +120,7 @@ function HomeView({ dashboard, notify }: { dashboard: TeacherDashboard; notify: 
 
   return (
     <section style={{ animation:"fadeUp 0.3s ease both" }}>
-      <SectionHeader title="ภาพรวมวันนี้" action="ดูรายงาน" onAction={() => notify("เปิดรายงานแล้ว")} />
+      <SectionHeader title="ภาพรวมวันนี้" action="ดูรายงาน" onAction={() => window.location.href = "/app/reports"} />
 
       {/* Stats */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0.6rem", marginBottom:"1rem" }}>
