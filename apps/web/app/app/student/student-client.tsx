@@ -8,6 +8,7 @@ import type {
   StudentAssignmentItem,
   StudentAttendanceItem
 } from "@/lib/queries/student";
+import type { Quiz, QuizAttempt } from "@/lib/database.types";
 
 type Props = {
   student: {
@@ -19,6 +20,7 @@ type Props = {
     room: string;
   };
   dashData: StudentDashboardData;
+  quizzes: Array<Quiz & { attempt: QuizAttempt | null }>;
   isDemo: boolean;
   signOutAction: () => Promise<void>;
 };
@@ -61,7 +63,7 @@ function formatDate(dateStr: string | null): string {
   });
 }
 
-export function StudentClient({ student, dashData, isDemo, signOutAction }: Props) {
+export function StudentClient({ student, dashData, quizzes, isDemo, signOutAction }: Props) {
   const { courses, recentAssignments, recentAttendance, stats } = dashData;
 
   // Selected assignment ID for submission form toggle
@@ -304,6 +306,86 @@ export function StudentClient({ student, dashData, isDemo, signOutAction }: Prop
                           </div>
                         )}
                       </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </section>
+
+      {/* Online Quizzes */}
+      <section style={style.section}>
+        <h2 style={style.sectionTitle}>📝 แบบทดสอบออนไลน์</h2>
+        <div style={style.list}>
+          {quizzes.length === 0 ? (
+            <div style={style.emptyState}>ยังไม่มีแบบทดสอบในขณะนี้</div>
+          ) : (
+            quizzes.map((q) => {
+              const hasAttempted = q.attempt !== null;
+              
+              return (
+                <div
+                  key={q.id}
+                  style={{
+                    ...style.card,
+                    borderLeft: `4px solid ${hasAttempted ? "#10b981" : "#4f46e5"}`
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "flex-start" }}>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ color: "#1e293b", fontSize: "0.88rem", margin: 0, fontWeight: 600 }}>
+                        {q.title}
+                      </p>
+                      <p style={{ color: "#64748b", fontSize: "0.75rem", margin: "0.2rem 0 0" }}>
+                        {q.description || "ไม่มีรายละเอียดคำอธิบาย"}
+                      </p>
+                      <p style={{ color: "#94a3b8", fontSize: "0.7rem", margin: "0.25rem 0 0" }}>
+                        คะแนนเต็ม: {q.max_score} คะแนน | จำกัดเวลา: {q.time_limit ? `${q.time_limit} นาที` : "ไม่จำกัด"}
+                      </p>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <span
+                        style={{
+                          background: hasAttempted ? "#dcfce7" : "#e0e7ff",
+                          color: hasAttempted ? "#15803d" : "#4338ca",
+                          fontSize: "0.7rem",
+                          padding: "0.2rem 0.5rem",
+                          borderRadius: "0.4rem",
+                          fontWeight: 700
+                        }}
+                      >
+                        {hasAttempted ? "ทำแล้ว" : "ยังไม่ทำ"}
+                      </span>
+                      {hasAttempted && q.attempt && (
+                        <p style={{ color: "#16a34a", fontSize: "0.85rem", margin: "0.3rem 0 0", fontWeight: 800 }}>
+                          {q.attempt.score} / {q.max_score}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {!hasAttempted && (
+                    <div style={{ marginTop: "0.75rem", borderTop: "1px dashed #cbd5e1", paddingTop: "0.75rem" }}>
+                      <a
+                        href={`/app/student/quizzes/${q.id}`}
+                        style={{
+                          display: "block",
+                          width: "100%",
+                          textAlign: "center",
+                          padding: "0.5rem",
+                          background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
+                          color: "#fff",
+                          borderRadius: "8px",
+                          fontSize: "0.8rem",
+                          fontWeight: 700,
+                          textDecoration: "none",
+                          boxShadow: "0 2px 8px rgba(79,70,229,0.25)"
+                        }}
+                      >
+                        ✍️ เริ่มทำแบบทดสอบ
+                      </a>
                     </div>
                   )}
                 </div>

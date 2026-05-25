@@ -4,6 +4,7 @@ import { getStudentDashboard, type StudentDashboardData } from "@/lib/queries/st
 import { signOut } from "@/app/login/actions";
 import { hasSupabaseEnv } from "@/lib/env";
 import { StudentClient } from "@/app/app/student/student-client";
+import { getStudentQuizzes } from "@/lib/queries/quizzes";
 
 const demoStudent = {
   id: "demo",
@@ -88,6 +89,8 @@ export default async function StudentDashboardPage() {
     dashData = await getStudentDashboard(student.id);
   }
 
+  const quizzes = await getStudentQuizzes(student.id);
+
   async function handleSignOut() {
     "use server";
     await signOut();
@@ -98,6 +101,7 @@ export default async function StudentDashboardPage() {
       <StudentClient
         student={student}
         dashData={dashData}
+        quizzes={quizzes}
         isDemo={isDemo}
         signOutAction={handleSignOut}
       />

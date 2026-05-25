@@ -105,3 +105,35 @@ export type TeacherDashboard = {
     readiness: number;
   };
 };
+
+export type Quiz = {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string | null;
+  max_score: number;
+  time_limit: number | null;
+  is_published: boolean;
+  created_by: string;
+  created_at: string;
+};
+
+export type QuizQuestion = {
+  id: string;
+  quiz_id: string;
+  question_text: string;
+  question_type: string;
+  options: string[];
+  correct_option_index: number;
+  points: number;
+  sort_order: number;
+};
+
+export type QuizAttempt = {
+  id: string;
+  quiz_id: string;
+  student_id: string;
+  score: number;
+  submitted_at: string;
+  answers: Array<{ question_id: string; selected_index: number }>;
+};

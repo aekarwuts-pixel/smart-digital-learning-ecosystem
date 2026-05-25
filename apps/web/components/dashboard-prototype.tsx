@@ -115,8 +115,10 @@ function HomeView({ dashboard, notify }: { dashboard: TeacherDashboard; notify: 
   const quickActions = [
     { emoji:"📋", label:"เช็คชื่อเข้าเรียน",    color:"linear-gradient(135deg,#6366f1,#8b5cf6)", href:"/app/attendance" },
     { emoji:"➕", label:"สั่งงาน & ตรวจงาน",    color:"linear-gradient(135deg,#f59e0b,#f97316)", href:"/app/assignments" },
+    { emoji:"📝", label:"แบบทดสอบออนไลน์",  color:"linear-gradient(135deg,#8b5cf6,#ec4899)", href:"/app/quizzes" },
     { emoji:"👥", label:"ดูแลช่วยเหลือ",   color:"linear-gradient(135deg,#06b6d4,#0891b2)", href:"/app/students/behavior" },
     { emoji:"📄", label:"รายงาน วPA",  color:"linear-gradient(135deg,#10b981,#059669)", href:"/app/pa" },
+    { emoji:"🏫", label:"ข้อมูลรายวิชา",    color:"linear-gradient(135deg,#3b82f6,#06b6d4)", href:"/app/courses" },
   ];
 
   return (
