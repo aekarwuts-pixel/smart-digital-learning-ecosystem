@@ -2,6 +2,8 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
+import { verifyAdminOverride } from "./lib/admin-auth";
+
 
 /** Supabase renamed the anon key — support both names */
 function getAnonKey(): string | undefined {
@@ -79,13 +81,20 @@ export async function middleware(request: NextRequest) {
     // No profile found → allow pass-through (will show generic error if needed)
     if (!profile) {
       if (path.startsWith("/app/admin")) {
-        return NextResponse.redirect(new URL("/app", request.url));
+        const overrideCookie = request.cookies.get("admin_override")?.value;
+        const hasOverride = await verifyAdminOverride(overrideCookie);
+        if (!hasOverride) {
+          return NextResponse.redirect(new URL("/app/admin-login", request.url));
+        }
       }
       return supabaseResponse;
     }
 
-    // 4. Approval check (admin is always approved)
-    if (profile.role !== "admin") {
+    // 4. Approval check (admin is always approved, check override for teachers)
+    const overrideCookie = request.cookies.get("admin_override")?.value;
+    const hasOverride = await verifyAdminOverride(overrideCookie);
+
+    if (profile.role !== "admin" && !hasOverride) {
       if (profile.approval_status === "pending") {
         return NextResponse.redirect(new URL("/login?reason=pending", request.url));
       }
@@ -95,8 +104,8 @@ export async function middleware(request: NextRequest) {
     }
 
     // 5. Admin-only route guard
-    if (path.startsWith("/app/admin") && profile.role !== "admin") {
-      return NextResponse.redirect(new URL("/app", request.url));
+    if (path.startsWith("/app/admin") && profile.role !== "admin" && !hasOverride) {
+      return NextResponse.redirect(new URL("/app/admin-login", request.url));
     }
   }
 

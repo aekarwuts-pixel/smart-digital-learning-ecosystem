@@ -3,6 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/env";
 import { signOut } from "@/app/login/actions";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { cookies } from "next/headers";
+import { verifyAdminOverride } from "@/lib/admin-auth";
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -41,7 +44,10 @@ export default async function AdminPage() {
       .eq("auth_user_id", user.id)
       .maybeSingle();
 
-    if (profile?.role !== "admin") redirect("/app");
+    const cookieStore = await cookies();
+    const hasOverride = await verifyAdminOverride(cookieStore.get("admin_override")?.value);
+
+    if (profile?.role !== "admin" && !hasOverride) redirect("/app");
   }
 
   const pending = await getPendingProfiles();

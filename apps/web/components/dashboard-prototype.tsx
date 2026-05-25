@@ -52,6 +52,7 @@ export function DashboardPrototype({ assignments, dashboard, evidences, isDemoMo
           <button style={s.notifBtn} type="button" onClick={() => notify("มีงานรอตรวจ และ วPA ใหม่")} aria-label="แจ้งเตือน">
             🔔<span style={s.badge}>3</span>
           </button>
+          <a href="/app/admin" style={s.adminBtn} title="ผู้ดูแลระบบ">⚙️</a>
           <form action={signOut}>
             <button type="submit" style={s.signOutBtn} title="ออกจากระบบ">↩</button>
           </form>
@@ -367,6 +368,14 @@ const s: Record<string, React.CSSProperties> = {
     color:"#e2e8f0", borderRadius:"10px",
     width:"38px", height:"38px", cursor:"pointer", fontSize:"1rem",
     fontFamily:"Sarabun,sans-serif",
+  },
+  adminBtn: {
+    border:"none", background:"rgba(255,255,255,0.1)",
+    color:"#e2e8f0", borderRadius:"10px",
+    width:"38px", height:"38px", cursor:"pointer", fontSize:"1.1rem",
+    fontFamily:"Sarabun,sans-serif",
+    display:"flex", alignItems:"center", justifyContent:"center",
+    textDecoration:"none",
   },
   profileCard: {
     display:"flex", alignItems:"center", gap:"0.75rem",

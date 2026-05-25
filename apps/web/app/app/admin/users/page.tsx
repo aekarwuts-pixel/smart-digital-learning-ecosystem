@@ -4,8 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { hasSupabaseEnv } from "@/lib/env";
 import { AdminUsersClient } from "@/app/app/admin/users/users-client";
+import { cookies } from "next/headers";
+import { verifyAdminOverride } from "@/lib/admin-auth";
 
 type UserProfile = {
+// ... (omitted types since they are exactly the same, but let's make sure target matches exactly)
+
   id: string;
   full_name: string;
   email: string | null;
@@ -54,7 +58,10 @@ export default async function AdminUsersPage() {
       .eq("auth_user_id", user.id)
       .maybeSingle<{ role: string }>();
 
-    if (profile?.role !== "admin") redirect("/app");
+    const cookieStore = await cookies();
+    const hasOverride = await verifyAdminOverride(cookieStore.get("admin_override")?.value);
+
+    if (profile?.role !== "admin" && !hasOverride) redirect("/app");
   }
 
   const profiles = await getAllProfiles();
