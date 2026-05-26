@@ -4,7 +4,7 @@ import { InstallAppButton } from "@/components/install-app-button";
 export default function HomePage() {
   return (
     <main className="landing-root">
-      <section className="landing-shell">
+      <section className="landing-shell cyber-glass-card" style={{ padding: "3rem 2.5rem" }}>
 
         {/* Logo — same style as login page */}
         <div style={{
@@ -18,11 +18,11 @@ export default function HomePage() {
             width: "52px",
             height: "52px",
             borderRadius: "15px",
-            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            background: "linear-gradient(135deg, #22c55e, #15803d)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 4px 14px rgba(99,102,241,0.35)",
+            boxShadow: "0 4px 14px rgba(34,197,94,0.25)",
             flexShrink: 0,
           }}>
             <span style={{ color: "#fff", fontWeight: 700, fontSize: "1.5rem" }}>M</span>
@@ -30,7 +30,7 @@ export default function HomePage() {
           <div style={{ textAlign: "left" }}>
             <p style={{
               fontSize: "0.7rem",
-              color: "#6366f1",
+              color: "#15803d",
               fontWeight: 700,
               margin: 0,
               letterSpacing: "0.06em",
@@ -48,7 +48,7 @@ export default function HomePage() {
         {/* Divider */}
         <div style={{
           height: "1px",
-          background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.15), transparent)",
+          background: "linear-gradient(90deg, transparent, rgba(34,197,94,0.2), transparent)",
           marginBottom: "1.75rem",
         }} />
 

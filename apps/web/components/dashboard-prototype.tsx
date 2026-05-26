@@ -59,10 +59,16 @@ export function DashboardPrototype({ assignments, dashboard, evidences, isDemoMo
               className={`sidebar-link ${view === item.id ? "sidebar-link-active" : ""}`}
               onClick={() => setView(item.id)}
               aria-pressed={view === item.id}
+              style={{ padding: "0.5rem" }}
             >
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: view === item.id ? "'FILL' 1" : "'FILL' 0" }}>
-                {item.icon}
-              </span>
+              <div className="glass-icon-container" style={{ width: "2.5rem", height: "2.5rem" }}>
+                <div className={`glass-icon-bg-shape ${item.id === 'home' ? 'blue' : item.id === 'class' ? 'green' : item.id === 'portfolio' ? 'orange' : item.id === 'pa' ? 'pink' : 'indigo'}`}></div>
+                <div className="glass-icon-foreground" style={{ borderRadius: "8px" }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: "1.25rem", fontVariationSettings: view === item.id ? "'FILL' 1" : "'FILL' 0" }}>
+                    {item.icon}
+                  </span>
+                </div>
+              </div>
               <span className="font-semibold">{item.label}</span>
             </button>
           ))}
@@ -205,30 +211,92 @@ function HomeView({ dashboard, notify, formattedDate }: { dashboard: TeacherDash
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid-4-col">
-        {stats.map(s => (
-          <div key={s.label} className={`clean-card-lowest stat-card-border stat-card-${s.color} flex flex-col justify-between min-h-[10rem]`}>
-            <div>
-              <div className={`stat-icon-wrap bg-${s.color}/10 text-${s.color}`} style={{ color: `var(--stat-${s.color})`, background: `rgba(var(--stat-${s.color}-rgb, 99, 102, 241), 0.1)` }}>
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
-              </div>
-              <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">{s.label}</p>
-              <h3 className="headline-font text-2xl font-black mt-2 leading-none" style={{ color: `var(--stat-${s.color})` }}>{s.value}</h3>
+      {/* Stats Layered Layout mimicking Soft UI */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12 mb-8">
+        
+        {/* Big Circle Chart Card (Overlapping layout) */}
+        <div className="layered-glass-card lg:col-span-2 flex flex-col justify-center min-h-[14rem]" style={{ marginRight: '2rem' }}>
+          <div className="glass-circle-chart">
+            <svg viewBox="0 0 36 36" className="w-24 h-24 transform -rotate-90">
+              <path strokeDasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" strokeWidth="4" />
+              <path strokeDasharray="82.5, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#gradientGreen)" strokeWidth="4" strokeLinecap="round" />
+              <defs>
+                <linearGradient id="gradientGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#34d399" />
+                  <stop offset="100%" stopColor="#059669" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="absolute flex flex-col items-center justify-center">
+              <span className="text-xl font-black text-on-surface">82.5%</span>
+              <span className="text-[9px] font-bold text-on-surface-variant uppercase">ความคืบหน้า</span>
             </div>
-            {s.hasProgress ? (
-              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-3">
-                <div className="h-full rounded-full" style={{ width: "82.5%", background: "#10b981", boxShadow: "0 0 6px rgba(16,185,129,0.5)" }} />
-              </div>
-            ) : (
-              <p className="text-[11px] text-on-surface-variant font-medium mt-3">
-                {s.color === "indigo" && "📈 +5% จากสัปดาห์ที่แล้ว"}
-                {s.color === "orange" && "⏳ กำหนดส่งภายในวันนี้ 12 งาน"}
-                {s.color === "violet" && "🏅 เก็บชั่วโมงครบ 100% แล้ว"}
-              </p>
-            )}
+            {/* Small overlapping indicator */}
+            <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-emerald-500 border-2 border-emerald-100 text-[10px] font-bold">
+              +5%
+            </div>
           </div>
-        ))}
+          
+          <div className="max-w-[60%]">
+            <h3 className="headline-font font-black text-2xl text-on-surface">ภาพรวมความก้าวหน้า</h3>
+            <p className="text-sm text-on-surface-variant mt-2 mb-4 leading-relaxed">
+              อัตราความสำเร็จของนักเรียนโดยรวมดีขึ้นอย่างต่อเนื่องในสัปดาห์นี้
+            </p>
+            <div className="flex gap-4">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary bg-primary/10 p-1 rounded-md text-sm">groups</span>
+                <div>
+                  <p className="text-[10px] font-bold text-on-surface-variant uppercase">นักเรียนทั้งหมด</p>
+                  <p className="font-bold text-sm">{dashboard.studentCount}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-emerald-600 bg-emerald-500/10 p-1 rounded-md text-sm">verified</span>
+                <div>
+                  <p className="text-[10px] font-bold text-on-surface-variant uppercase">สถานะ วPA</p>
+                  <p className="font-bold text-sm text-emerald-700">ดีเยี่ยม</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating Side Cards Stacked */}
+        <div className="flex flex-col gap-6 relative" style={{ marginTop: '-2rem' }}>
+          
+          {/* Card 1 */}
+          <div className="layered-glass-card !p-4 flex items-center gap-4 z-10 transform hover:translate-x-2 transition-transform">
+            <div className="floating-badge bg-orange-100 text-orange-600">
+              <span className="material-symbols-outlined text-xl">assignment_late</span>
+            </div>
+            <div className="ml-6">
+              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">งานที่รอตรวจ</p>
+              <h3 className="headline-font text-2xl font-black text-orange-500 leading-none">{dashboard.pendingReviews}</h3>
+            </div>
+            <div className="ml-auto">
+              <button className="text-orange-500 hover:bg-orange-50 p-2 rounded-full transition-colors" onClick={() => notify("เปิดรายการรอตรวจ")}>
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className="layered-glass-card !p-4 flex items-center gap-4 z-0 transform translate-x-4 hover:translate-x-6 transition-transform">
+            <div className="floating-badge bg-indigo-100 text-indigo-600">
+              <span className="material-symbols-outlined text-xl">school</span>
+            </div>
+            <div className="ml-6">
+              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">บทเรียนพร้อมใช้</p>
+              <h3 className="headline-font text-2xl font-black text-indigo-500 leading-none">16+</h3>
+            </div>
+             <div className="ml-auto">
+              <button className="text-indigo-500 hover:bg-indigo-50 p-2 rounded-full transition-colors" onClick={() => notify("เปิดคลังบทเรียน")}>
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       {/* Bento Grid */}
@@ -393,28 +461,33 @@ function ClassView({ dashboard, notify }: { dashboard: TeacherDashboard; notify:
         </button>
       </div>
 
-      {/* Courses Cards Grid */}
-      <div className="grid-3-col">
-        {courses.map(c => (
-          <div key={c.title} className={`clean-card-lowest subject-card subject-card-${c.color} overflow-hidden`} style={{ padding: 0 }}>
-            <div className={`subject-header-bg bg-gradient-${c.color}`}>
-              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold text-white uppercase ${
+      {/* Courses Cards Grid - Staggered Layering */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 pb-12">
+        {courses.map((c, idx) => (
+          <div key={c.title} className={`layered-glass-card subject-card subject-card-${c.color} transform transition-transform hover:scale-105`} style={{ padding: 0, marginTop: idx === 1 ? '1.5rem' : idx === 2 ? '3rem' : '0', zIndex: 3 - idx }}>
+            <div className={`subject-header-bg bg-gradient-${c.color} relative overflow-hidden`} style={{ borderTopLeftRadius: '24px', borderTopRightRadius: '24px' }}>
+              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold text-white uppercase relative z-10 ${
                 c.code === "active" ? "bg-[#00C38B]" : c.code === "queue" ? "bg-slate-400" : "bg-[#3B82F6]"
               }`}>
                 {c.code === "active" ? "Active" : c.code === "queue" ? "Queue" : "Next Session"}
               </span>
-              <span className={`material-symbols-outlined text-4xl text-${c.color}`} style={{ color: c.color === "emerald" ? "#00C38B" : c.color === "coral" ? "#FF6B6B" : "#3B82F6" }}>{c.icon}</span>
+              <span className={`material-symbols-outlined absolute -right-2 -bottom-4 text-8xl opacity-20 text-white`}>{c.icon}</span>
+              <span className={`material-symbols-outlined text-4xl text-${c.color} relative z-10`} style={{ color: c.color === "emerald" ? "#00C38B" : c.color === "coral" ? "#FF6B6B" : "#3B82F6" }}>{c.icon}</span>
             </div>
-            <div className="p-4 space-y-3">
-              <h3 className="headline-font font-bold text-sm text-on-surface">{c.title}</h3>
+            <div className="p-5 space-y-3 relative">
+              {/* Floating Badge */}
+              <div className="absolute -top-6 right-4 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center font-bold text-sm text-on-surface">
+                {c.progress}%
+              </div>
+
+              <h3 className="headline-font font-bold text-base text-on-surface leading-tight">{c.title}</h3>
               <div className="flex items-center gap-1 text-[11px] text-on-surface-variant font-medium">
-                <span className="material-symbols-outlined text-[14px]">groups</span>
+                <span className="material-symbols-outlined text-[16px]">groups</span>
                 {c.count} นักเรียน
               </div>
-              <div className="pt-1">
+              <div className="pt-2">
                 <div className="flex justify-between text-[10px] font-bold mb-1">
                   <span className="text-on-surface-variant">ความคืบหน้าการส่งงาน</span>
-                  <span style={{ color: c.color === "emerald" ? "#00C38B" : c.color === "coral" ? "#FF6B6B" : "#3B82F6" }}>{c.progress}%</span>
                 </div>
                 <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ 

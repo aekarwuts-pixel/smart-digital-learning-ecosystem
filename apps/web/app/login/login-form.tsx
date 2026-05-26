@@ -25,12 +25,10 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
   const reasonBanner = getReasonBanner(reason);
 
   return (
-    <main style={styles.root} className="cyber-shell">
-      {/* Background blobs */}
-      <div style={styles.blob1} aria-hidden />
-      <div style={styles.blob2} aria-hidden />
+    <main className="landing-root" style={{...styles.root, background: "transparent"}}>
+      {/* Background blobs (now handled by landing-root in CSS) */}
 
-      <div style={styles.card} className="cyber-glass-card">
+      <div className="cyber-glass-card" style={styles.card}>
         {/* Logo */}
         <div style={styles.logoWrap}>
           <div style={styles.logoCircle}>
@@ -169,7 +167,7 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
               </div>
             </div>
 
-            <button id="btn-student-login" type="submit" disabled={pending} style={{ ...styles.submitBtn, background: "linear-gradient(135deg, #059669, #10b981)" }} className="btn-hover">
+            <button id="btn-student-login" type="submit" disabled={pending} style={{ ...styles.submitBtn }} className="btn-hover">
               {pending ? (
                 <><span style={styles.spinner} /> กำลังเข้าสู่ระบบ...</>
               ) : "เข้าสู่ระบบ"}
@@ -230,18 +228,6 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
           to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Cyber grid overlay on login */
-        .cyber-shell::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-          background-size: 20px 20px;
-          pointer-events: none;
-          z-index: 0;
-        }
       `}</style>
     </main>
   );
@@ -255,7 +241,6 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "var(--background)",
     color: "var(--on-surface)",
     fontFamily: "'Outfit', 'Sarabun', sans-serif",
     padding: "1rem",
@@ -286,13 +271,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
     width: "100%",
     maxWidth: "400px",
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    borderRadius: "24px",
     padding: "2rem 2rem 1.5rem",
-    boxShadow: "0 20px 25px -5px rgba(0, 66, 195, 0.04), 0 10px 10px -5px rgba(0, 66, 195, 0.02)",
-    border: "1px solid rgba(195,197,216,0.3)",
     animation: "fadeSlideUp 0.4s ease both",
     zIndex: 1,
   },
@@ -306,11 +285,11 @@ const styles: Record<string, React.CSSProperties> = {
     width: "48px",
     height: "48px",
     borderRadius: "14px",
-    background: "linear-gradient(135deg, #0042c3, #007650)",
+    background: "linear-gradient(135deg, #22c55e, #15803d)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "0 4px 12px rgba(0,66,195,0.15)",
+    boxShadow: "0 4px 12px rgba(34,197,94,0.2)",
     flexShrink: 0,
   },
   logoLetter: {
@@ -424,14 +403,14 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "0.85rem",
     border: "none",
     borderRadius: "12px",
-    background: "linear-gradient(135deg, #0042c3, #007650)",
+    background: "linear-gradient(135deg, #22c55e, #15803d)",
     color: "#fff",
     fontSize: "0.95rem",
     fontFamily: "'Sarabun', sans-serif",
     fontWeight: 700,
     cursor: "pointer",
     transition: "all 0.2s ease",
-    boxShadow: "0 4px 14px rgba(0,66,195,0.15)",
+    boxShadow: "0 4px 14px rgba(34,197,94,0.25)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

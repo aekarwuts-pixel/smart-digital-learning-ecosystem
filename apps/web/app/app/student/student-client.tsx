@@ -280,14 +280,14 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
                 <div style={style.emptyState}>ยังไม่ได้ลงทะเบียนวิชาใด</div>
               ) : (
                 courses.map((c) => (
-                  <div key={c.course_id} className="cyber-glass-card dash-card" style={style.card}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div>
-                        <strong style={{ color: "#f1f5f9", fontSize: "0.9rem" }}>
-                          {c.course_code ? `[${c.course_code}] ` : ""}
-                          {c.course_title}
-                        </strong>
-                        <p style={{ color: "#94a3b8", fontSize: "0.78rem", margin: "0.2rem 0 0" }}>
+                    <div key={c.course_id} className="cyber-glass-card dash-card" style={style.card}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div>
+                          <strong style={{ color: "var(--on-surface)", fontSize: "0.9rem" }}>
+                            {c.course_code ? `[${c.course_code}] ` : ""}
+                            {c.course_title}
+                          </strong>
+                          <p style={{ color: "var(--on-surface-variant)", fontSize: "0.78rem", margin: "0.2rem 0 0" }}>
                           ครู {c.teacher_name} · ห้อง {c.classroom_name}
                         </p>
                       </div>
@@ -323,10 +323,10 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem" }}>
                         <div style={{ flex: 1 }}>
-                          <p style={{ color: "#f1f5f9", fontSize: "0.88rem", margin: 0, fontWeight: 600 }}>
+                          <p style={{ color: "var(--on-surface)", fontSize: "0.88rem", margin: 0, fontWeight: 600 }}>
                             {a.title}
                           </p>
-                          <p style={{ color: "#94a3b8", fontSize: "0.75rem", margin: "0.2rem 0 0" }}>
+                          <p style={{ color: "var(--on-surface-variant)", fontSize: "0.75rem", margin: "0.2rem 0 0" }}>
                             {a.course_title}
                             {a.due_at && (
                               <span style={{ color: "#94a3b8" }}>
@@ -457,10 +457,10 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", alignItems: "flex-start" }}>
                         <div style={{ flex: 1 }}>
-                          <p style={{ color: "#f1f5f9", fontSize: "0.88rem", margin: 0, fontWeight: 600 }}>
+                          <p style={{ color: "var(--on-surface)", fontSize: "0.88rem", margin: 0, fontWeight: 600 }}>
                             {q.title}
                           </p>
-                          <p style={{ color: "#94a3b8", fontSize: "0.75rem", margin: "0.2rem 0 0" }}>
+                          <p style={{ color: "var(--on-surface-variant)", fontSize: "0.75rem", margin: "0.2rem 0 0" }}>
                             {q.description || "ไม่มีรายละเอียดคำอธิบาย"}
                           </p>
                           <p style={{ color: "#94a3b8", fontSize: "0.7rem", margin: "0.25rem 0 0" }}>
@@ -532,11 +532,11 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
                     <div key={i} className="cyber-glass-card dash-card" style={style.attendanceCard}>
                       <span style={{ fontSize: "1.1rem" }}>{lbl.icon}</span>
                       <div style={{ flex: 1 }}>
-                        <p style={{ color: "#f1f5f9", fontSize: "0.85rem", margin: 0, fontWeight: 600 }}>
+                        <p style={{ color: "var(--on-surface)", fontSize: "0.85rem", margin: 0, fontWeight: 600 }}>
                           {a.course_title}
                           {a.period_label ? ` · ${a.period_label}` : ""}
                         </p>
-                        <p style={{ color: "#94a3b8", fontSize: "0.72rem", margin: "0.1rem 0 0" }}>
+                        <p style={{ color: "var(--on-surface-variant)", fontSize: "0.72rem", margin: "0.1rem 0 0" }}>
                           {formatDate(a.session_date)}
                         </p>
                       </div>
@@ -632,21 +632,39 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
               📜 ประวัติความประพฤติและการดูแลช่วยเหลือ
             </h2>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", position: "relative", paddingLeft: "20px" }}>
+              {/* Timeline Track Line */}
+              <div style={{ position: "absolute", left: "7px", top: "10px", bottom: "10px", width: "2px", background: "rgba(195, 197, 216, 0.3)", zIndex: 0 }}></div>
+              
               {behaviorLogs.length === 0 ? (
                 <div style={style.emptyState}>ยังไม่มีประวัติบันทึกพฤติกรรมของนักเรียนในวิชาใด</div>
               ) : (
                 behaviorLogs.map((log) => {
                   const isAck = log.parent_acknowledged;
+                  const catColor = behaviorCategoryColor[log.category] ?? "#cbd5e1";
                   return (
-                    <div
-                      key={log.id}
-                      className="cyber-glass-card"
-                      style={{
-                        ...style.timelineLogItem,
-                        borderLeft: `4px solid ${behaviorCategoryColor[log.category] ?? "#cbd5e1"}`
-                      }}
-                    >
+                    <div key={log.id} style={{ position: "relative" }}>
+                      {/* Timeline Dot Node */}
+                      <div style={{
+                        position: "absolute",
+                        left: "-25px",
+                        top: "16px",
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "50%",
+                        background: "var(--surface)",
+                        border: `4px solid ${catColor}`,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                        zIndex: 1
+                      }}></div>
+                      
+                      <div
+                        className="layered-glass-card hover:scale-[1.02] transition-transform"
+                        style={{
+                          ...style.timelineLogItem,
+                          borderTop: `4px solid ${catColor}`
+                        }}
+                      >
                       <div style={style.logHeaderRow}>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", alignItems: "center" }}>
                           <span
@@ -736,6 +754,7 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
                         )}
                       </div>
 
+                      </div>
                     </div>
                   );
                 })
@@ -795,9 +814,6 @@ const style: Record<string, React.CSSProperties> = {
     boxShadow: "none"
   },
   behaviorCard: {
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
     border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "16px",
     padding: "1.25rem",
@@ -821,9 +837,6 @@ const style: Record<string, React.CSSProperties> = {
     background: "rgba(0, 66, 195, 0.05)"
   },
   modeSelectorCard: {
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
     border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "0.75rem 1rem",
@@ -864,9 +877,6 @@ const style: Record<string, React.CSSProperties> = {
     boxShadow: "0 4px 14px rgba(0,118,80,0.15)"
   },
   timelineLogItem: {
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
     border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "12px",
@@ -952,9 +962,6 @@ const style: Record<string, React.CSSProperties> = {
     marginTop: "8px"
   },
   statCard: {
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
     border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "10px",
@@ -990,9 +997,6 @@ const style: Record<string, React.CSSProperties> = {
     gap: "8px"
   },
   card: {
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
     border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "12px",
@@ -1000,9 +1004,6 @@ const style: Record<string, React.CSSProperties> = {
     transition: "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)"
   },
   attendanceCard: {
-    background: "rgba(255, 255, 255, 0.75)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
     border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "10px 12px",
