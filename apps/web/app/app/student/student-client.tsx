@@ -768,12 +768,12 @@ export function StudentClient({ student, dashData, quizzes, isDemo, signOutActio
 const style: Record<string, React.CSSProperties> = {
   tabBar: {
     display: "flex",
-    background: "rgba(15, 23, 42, 0.6)",
+    background: "var(--surface-container-low)",
     borderRadius: "12px",
     padding: "0.25rem",
     gap: "0.25rem",
     marginTop: "0.5rem",
-    border: "1px solid rgba(255, 255, 255, 0.08)"
+    border: "1px solid rgba(195, 197, 216, 0.3)"
   },
   tabBtn: {
     flex: 1,
@@ -784,24 +784,24 @@ const style: Record<string, React.CSSProperties> = {
     fontFamily: "Sarabun, sans-serif",
     fontWeight: 600,
     background: "transparent",
-    color: "#94a3b8",
+    color: "var(--on-surface-variant)",
     cursor: "pointer",
     transition: "all 0.15s ease"
   },
   tabBtnActive: {
-    background: "rgba(99, 102, 241, 0.15)",
-    color: "#818cf8",
-    border: "1px solid rgba(99, 102, 241, 0.25)",
-    boxShadow: "inset 0 0 10px rgba(99,102,241,0.1)"
+    background: "rgba(0, 66, 195, 0.08)",
+    color: "var(--primary)",
+    border: "1px solid rgba(0, 66, 195, 0.15)",
+    boxShadow: "none"
   },
   behaviorCard: {
-    background: "rgba(30, 41, 59, 0.45)",
+    background: "rgba(255, 255, 255, 0.75)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
+    border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "16px",
     padding: "1.25rem",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    boxShadow: "0 10px 25px -5px rgba(0, 66, 195, 0.03), 0 5px 10px -5px rgba(0, 66, 195, 0.01)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -812,30 +812,30 @@ const style: Record<string, React.CSSProperties> = {
     width: "90px",
     height: "90px",
     borderRadius: "50%",
-    border: "4px solid rgba(99, 102, 241, 0.2)",
-    borderTopColor: "#818cf8",
+    border: "4px solid rgba(0, 66, 195, 0.1)",
+    borderTopColor: "var(--primary)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    background: "rgba(99, 102, 241, 0.1)"
+    background: "rgba(0, 66, 195, 0.05)"
   },
   modeSelectorCard: {
-    background: "rgba(30, 41, 59, 0.45)",
+    background: "rgba(255, 255, 255, 0.75)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
+    border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "0.75rem 1rem",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)"
+    boxShadow: "0 10px 25px -5px rgba(0, 66, 195, 0.03), 0 5px 10px -5px rgba(0, 66, 195, 0.01)"
   },
   modeToggleLabel: {
     fontSize: "12.5px",
     fontWeight: 700,
-    color: "#94a3b8",
+    color: "var(--on-surface-variant)",
     display: "flex",
     alignItems: "center",
     gap: "8px",
@@ -843,8 +843,8 @@ const style: Record<string, React.CSSProperties> = {
   },
   parentPanel: {
     marginTop: "8px",
-    background: "rgba(15, 23, 42, 0.4)",
-    border: "1.5px dashed rgba(255, 255, 255, 0.15)",
+    background: "var(--surface)",
+    border: "1.5px dashed var(--outline-variant)",
     borderRadius: "10px",
     padding: "10px",
     display: "flex",
@@ -856,21 +856,21 @@ const style: Record<string, React.CSSProperties> = {
     minHeight: "36px",
     borderRadius: "8px",
     border: "none",
-    background: "linear-gradient(135deg, #10b981, #059669)",
+    background: "linear-gradient(135deg, #007650, #005b3d)",
     color: "#fff",
     fontSize: "12.5px",
     fontWeight: 700,
     cursor: "pointer",
-    boxShadow: "0 4px 14px rgba(16,185,129,0.3)"
+    boxShadow: "0 4px 14px rgba(0,118,80,0.15)"
   },
   timelineLogItem: {
-    background: "rgba(30, 41, 59, 0.45)",
+    background: "rgba(255, 255, 255, 0.75)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
+    border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "12px",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    boxShadow: "0 10px 25px -5px rgba(0, 66, 195, 0.03), 0 5px 10px -5px rgba(0, 66, 195, 0.01)",
     display: "flex",
     flexDirection: "column",
     gap: "6px"
@@ -896,10 +896,10 @@ const style: Record<string, React.CSSProperties> = {
   },
   logAcknowledgeStatus: {
     marginTop: "6px",
-    borderTop: "1px dashed rgba(255, 255, 255, 0.1)",
+    borderTop: "1px dashed rgba(195, 197, 216, 0.3)",
     paddingTop: "6px",
     fontSize: "11.5px",
-    color: "#94a3b8",
+    color: "var(--on-surface-variant)",
     display: "flex",
     flexDirection: "column",
     gap: "2px"
@@ -910,9 +910,9 @@ const style: Record<string, React.CSSProperties> = {
     gap: "1rem"
   },
   header: {
-    background: "linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(124, 58, 237, 0.8))",
+    background: "linear-gradient(135deg, var(--primary), var(--primary-container))",
     backdropFilter: "blur(20px)",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+    borderBottom: "1px solid rgba(195, 197, 216, 0.3)",
     padding: "1rem 1.25rem",
     display: "flex",
     justifyContent: "space-between",
@@ -922,7 +922,7 @@ const style: Record<string, React.CSSProperties> = {
     color: "#fff"
   },
   headerSub: {
-    color: "#93c5fd",
+    color: "rgba(255, 255, 255, 0.85)",
     fontSize: "0.72rem",
     margin: 0,
     fontWeight: "bold"
@@ -932,11 +932,11 @@ const style: Record<string, React.CSSProperties> = {
     color: "#fff",
     margin: 0,
     fontWeight: 800,
-    textShadow: "0 0 8px rgba(255,255,255,0.15)"
+    textShadow: "none"
   },
   signOutBtn: {
-    background: "rgba(255,255,255,0.1)",
-    border: "1px solid rgba(255,255,255,0.2)",
+    background: "rgba(255, 255, 255, 0.15)",
+    border: "1px solid rgba(255, 255, 255, 0.25)",
     color: "#fff",
     borderRadius: "8px",
     padding: "0.35rem 0.75rem",
@@ -952,27 +952,27 @@ const style: Record<string, React.CSSProperties> = {
     marginTop: "8px"
   },
   statCard: {
-    background: "rgba(30, 41, 59, 0.45)",
+    background: "rgba(255, 255, 255, 0.75)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
+    border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "10px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    boxShadow: "0 10px 25px -5px rgba(0, 66, 195, 0.03), 0 5px 10px -5px rgba(0, 66, 195, 0.01)",
     transition: "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)"
   },
   statValue: {
     fontSize: "22px",
     fontWeight: 800,
-    color: "#f1f5f9",
+    color: "var(--on-surface)",
     margin: "4px 0 0"
   },
   statLabel: {
     fontSize: "11px",
-    color: "#94a3b8",
+    color: "var(--on-surface-variant)",
     margin: 0
   },
   section: {
@@ -981,7 +981,7 @@ const style: Record<string, React.CSSProperties> = {
   sectionTitle: {
     fontSize: "14px",
     fontWeight: 800,
-    color: "#f1f5f9",
+    color: "var(--on-surface)",
     margin: "0 0 8px"
   },
   list: {
@@ -990,43 +990,43 @@ const style: Record<string, React.CSSProperties> = {
     gap: "8px"
   },
   card: {
-    background: "rgba(30, 41, 59, 0.45)",
+    background: "rgba(255, 255, 255, 0.75)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
+    border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "12px",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    boxShadow: "0 10px 25px -5px rgba(0, 66, 195, 0.03), 0 5px 10px -5px rgba(0, 66, 195, 0.01)",
     transition: "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)"
   },
   attendanceCard: {
-    background: "rgba(30, 41, 59, 0.45)",
+    background: "rgba(255, 255, 255, 0.75)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
-    border: "1px solid rgba(255, 255, 255, 0.08)",
+    border: "1px solid rgba(195, 197, 216, 0.3)",
     borderRadius: "12px",
     padding: "10px 12px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)"
+    boxShadow: "0 10px 25px -5px rgba(0, 66, 195, 0.03), 0 5px 10px -5px rgba(0, 66, 195, 0.01)"
   },
   badgeBlue: {
-    background: "rgba(59, 130, 246, 0.15)",
-    color: "#60a5fa",
+    background: "rgba(0, 66, 195, 0.08)",
+    color: "var(--primary)",
     fontSize: "0.7rem",
     padding: "2px 6px",
     borderRadius: "6px",
     fontWeight: 700,
-    border: "1px solid rgba(59, 130, 246, 0.25)"
+    border: "1px solid rgba(0, 66, 195, 0.15)"
   },
   emptyState: {
-    background: "rgba(30, 41, 59, 0.2)",
-    border: "1px dashed rgba(255, 255, 255, 0.1)",
+    background: "rgba(255, 255, 255, 0.4)",
+    border: "1px dashed rgba(195, 197, 216, 0.4)",
     borderRadius: "12px",
     padding: "20px",
     textAlign: "center",
-    color: "#94a3b8",
+    color: "var(--on-surface-variant)",
     fontSize: "13px"
   },
   formPanel: {
@@ -1035,9 +1035,9 @@ const style: Record<string, React.CSSProperties> = {
   textarea: {
     width: "100%",
     borderRadius: "8px",
-    border: "1.5px solid rgba(255, 255, 255, 0.15)",
-    background: "rgba(15, 23, 42, 0.4)",
-    color: "#fff",
+    border: "1.5px solid var(--outline-variant)",
+    background: "var(--surface)",
+    color: "var(--on-surface)",
     padding: "8px",
     fontSize: "13px",
     outline: "none"
@@ -1047,16 +1047,16 @@ const style: Record<string, React.CSSProperties> = {
     minHeight: "36px",
     borderRadius: "8px",
     border: "none",
-    background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+    background: "linear-gradient(135deg, var(--primary), var(--primary-container))",
     color: "#fff",
     fontSize: "13px",
     fontWeight: 700,
     cursor: "pointer",
-    boxShadow: "0 4px 14px rgba(124, 58, 237, 0.3)"
+    boxShadow: "0 4px 14px rgba(0, 66, 195, 0.15)"
   },
   feedbackBox: {
-    background: "rgba(16, 185, 129, 0.1)",
-    border: "1px solid rgba(16, 185, 129, 0.2)",
+    background: "rgba(0, 118, 80, 0.05)",
+    border: "1px solid rgba(0, 118, 80, 0.15)",
     borderRadius: "8px",
     padding: "8px",
     marginBottom: "10px"
@@ -1071,6 +1071,6 @@ const style: Record<string, React.CSSProperties> = {
     fontSize: "13px",
     fontWeight: "bold",
     zIndex: 999,
-    boxShadow: "0 8px 24px rgba(0,0,0,0.4)"
+    boxShadow: "0 8px 24px rgba(0,0,0,0.08)"
   }
 };;
