@@ -31,6 +31,9 @@ export type BehaviorLogItem = {
   log_date: string;
   is_exported_to_pa: boolean;
   pa_evidence_id: string | null;
+  parent_acknowledged: boolean;
+  parent_acknowledged_at: string | null;
+  parent_comment: string | null;
   created_at: string;
 };
 
@@ -174,6 +177,9 @@ export async function saveBehaviorLog(input: BehaviorLogInput): Promise<{ succes
     log_date: input.logDate,
     is_exported_to_pa: input.isExportedToPa,
     pa_evidence_id: paEvidenceId ?? (input.isExportedToPa ? crypto.randomUUID() : null),
+    parent_acknowledged: false,
+    parent_acknowledged_at: null,
+    parent_comment: null,
     created_at: new Date().toISOString()
   };
 

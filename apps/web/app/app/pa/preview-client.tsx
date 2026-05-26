@@ -135,6 +135,172 @@ export function PaPreviewClient({ profile, evidences }: Props) {
     return labels[status] ?? status;
   }
 
+  function handleExportToWord() {
+    const title = `รายงานสรุปผลการประเมินผลการพัฒนางานตามข้อตกลง_PA_${academicYear}`;
+    
+    const profileTable = `
+      <table style="border: none; width: 100%; max-width: 600px; margin: 20px auto; border-collapse: collapse;">
+        <tr>
+          <td style="width: 150px; font-weight: bold; padding: 6px 0; border: none; font-size: 14pt;">ผู้รายงาน:</td>
+          <td style="padding: 6px 0; border: none; font-size: 14pt;">${profile.fullName}</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold; padding: 6px 0; border: none; font-size: 14pt;">ตำแหน่ง:</td>
+          <td style="padding: 6px 0; border: none; font-size: 14pt;">${profile.positionName} วิทยฐานะ ${profile.academicRank}</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold; padding: 6px 0; border: none; font-size: 14pt;">กลุ่มสาระการเรียนรู้:</td>
+          <td style="padding: 6px 0; border: none; font-size: 14pt;">${profile.subjectGroup}</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold; padding: 6px 0; border: none; font-size: 14pt;">สถานศึกษา:</td>
+          <td style="padding: 6px 0; border: none; font-size: 14pt;">${profile.schoolName}</td>
+        </tr>
+      </table>
+    `;
+
+    let evidenceSectionsHtml = "";
+    sections.forEach((sec) => {
+      let secHtml = `
+        <div style="margin-top: 30px; page-break-inside: avoid;">
+          <h2 style="font-size: 16pt; font-weight: bold; background-color: #f1f5f9; padding: 8px 12px; border-bottom: 2px solid #6366f1; color: #1e293b;">
+            ${sec.title}
+          </h2>
+      `;
+
+      sec.indicators.forEach((ind) => {
+        const matched = mappedEvidences[ind.code] || [];
+        let matchedHtml = "";
+
+        if (matched.length > 0) {
+          matched.forEach((e) => {
+            const desc = cleanDescription(e.description);
+            const statusLabel = getStatusLabel(e.description);
+            const dateStr = formatDate(e.evidence_date);
+            matchedHtml += `
+              <div style="margin-top: 10px; margin-bottom: 15px; padding: 12px; border: 1px solid #cbd5e1; background-color: #f8fafc; border-radius: 6px; page-break-inside: avoid;">
+                <table style="width: 100%; border: none; border-collapse: collapse;">
+                  <tr>
+                    <td style="font-weight: bold; border: none; font-size: 12pt;">📌 ${e.title}</td>
+                    <td style="text-align: right; font-weight: bold; color: #16a34a; border: none; font-size: 11pt;">สถานะ: ${statusLabel}</td>
+                  </tr>
+                </table>
+                <p style="margin: 6px 0; font-size: 12pt; color: #334155; line-height: 1.5; white-space: pre-wrap;">${desc}</p>
+                <span style="font-size: 10pt; color: #94a3b8;">วันที่แนบหลักฐาน: ${dateStr}</span>
+              </div>
+            `;
+          });
+        } else {
+          matchedHtml = `<p style="font-size: 11pt; color: #94a3b8; font-style: italic; margin-top: 6px;">⚠️ ยังไม่มีเอกสารหลักฐานประกอบในระบบ</p>`;
+        }
+
+        secHtml += `
+          <div style="margin-top: 20px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 15px; page-break-inside: avoid;">
+            <p style="font-size: 13pt; margin: 0 0 10px;">
+              <strong style="color: #4f46e5; background-color: #eef2ff; padding: 2px 6px; border-radius: 4px; font-size: 12pt;">ตัวชี้วัด ${ind.code}</strong>
+              <strong style="color: #0f172a; margin-left: 8px;">${ind.title}</strong>
+            </p>
+            ${matchedHtml}
+          </div>
+        `;
+      });
+
+      secHtml += `</div>`;
+      evidenceSectionsHtml += secHtml;
+    });
+
+    const fileContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+            xmlns:w='urn:schemas-microsoft-com:office:word' 
+            xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <title>รายงาน วPA</title>
+        <meta charset="utf-8">
+        <style>
+          body {
+            font-family: 'Sarabun', 'TH Sarabun PSK', Arial, sans-serif;
+            font-size: 16px;
+            color: #334155;
+            line-height: 1.6;
+          }
+          .title {
+            font-size: 20pt;
+            font-weight: bold;
+            color: #0f172a;
+            text-align: center;
+            margin-top: 20px;
+          }
+          .subtitle {
+            font-size: 13pt;
+            color: #475569;
+            text-align: center;
+            margin-top: 5px;
+          }
+          .year-text {
+            font-size: 15pt;
+            font-weight: bold;
+            color: #6366f1;
+            text-align: center;
+            margin-top: 5px;
+          }
+          .divider {
+            border-bottom: 2px solid #cbd5e1;
+            margin: 25px 0;
+            width: 100%;
+          }
+        </style>
+      </head>
+      <body>
+        <div style="text-align: center; font-size: 48px; color: #4f46e5; margin-bottom: 10px;">⚜️</div>
+        <h1 class="title">รายงานสรุปผลการประเมินผลการพัฒนางานตามข้อตกลง (PA)</h1>
+        <p class="subtitle">สำหรับข้าราชการครูและบุคลากรทางการศึกษา ตำแหน่ง ${profile.positionName} วิทยฐานะ ${profile.academicRank}</p>
+        <p class="year-text">ประจำปีการศึกษา ${academicYear}</p>
+        
+        <div class="divider"></div>
+        
+        ${profileTable}
+        
+        <br style="page-break-before: always; break-before: page;" />
+        
+        <h1 style="font-size: 18pt; font-weight: bold; color: #1e293b; border-bottom: 3px solid #6366f1; padding-bottom: 8px; margin-top: 30px;">
+          ส่วนที่ 1: ผลสัมฤทธิ์ของงานตามตัวชี้วัด (15 ตัวชี้วัด)
+        </h1>
+        
+        ${evidenceSectionsHtml}
+        
+        <br style="page-break-before: always; break-before: page;" />
+        
+        <table style="width: 100%; margin-top: 50px; border: none; border-collapse: collapse;">
+          <tr>
+            <td style="border: none;"></td>
+            <td style="text-align: right; padding-right: 50px; border: none; font-size: 14pt;">
+              ลงชื่อ..............................................................ผู้รับรองผล
+              <br/><br/>
+              (..............................................................)
+              <br/><br/>
+              ตำแหน่ง ผู้อำนวยการ${profile.schoolName}
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff' + fileContent], {
+      type: 'application/msword;charset=utf-8'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    alert("ดาวน์โหลดไฟล์ Word (.doc) เรียบร้อยแล้ว! คุณสามารถเปิดแก้ไขเพิ่มเติมใน Microsoft Word ได้เลยครับ");
+  }
+
   return (
     <div style={s.container}>
       {/* Dynamic styles supporting A4 standard printing layouts */}
@@ -206,9 +372,14 @@ export function PaPreviewClient({ profile, evidences }: Props) {
         <Link href="/app/pa" style={s.backBtn}>
           ← กลับหน้าจัดการหลักฐาน
         </Link>
-        <button type="button" onClick={() => window.print()} style={s.printBtn}>
-          🖨️ พิมพ์รายงาน / บันทึกเป็น PDF
-        </button>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <button type="button" onClick={() => window.print()} style={s.printBtn}>
+            🖨️ พิมพ์รายงาน / บันทึกเป็น PDF
+          </button>
+          <button type="button" onClick={handleExportToWord} style={{ ...s.printBtn, background: "linear-gradient(135deg, #10b981, #059669)" }}>
+            📝 ดาวน์โหลดไฟล์ Word (.doc)
+          </button>
+        </div>
       </div>
 
       {/* Filters card - hidden on printing */}

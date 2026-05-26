@@ -48,12 +48,12 @@ export function EvidenceForm({ evidences }: { evidences: PaEvidence[] }) {
 
   return (
     <div className="import-export-grid">
-      <article className="course-item">
-        <h3>เพิ่มหลักฐาน วPA</h3>
-        <p>คำแนะนำ: ใส่ผลลัพธ์ผู้เรียนที่วัดได้จริง พร้อมไฟล์หลักฐานที่ตรวจสอบย้อนหลังได้</p>
-        <form action={createAction} className="course-form">
+      <article className="course-item cyber-glass-card">
+        <h3 className="neon-text-indigo">เพิ่มหลักฐาน วPA</h3>
+        <p style={{ color: "#94a3b8" }}>คำแนะนำ: ใส่ผลลัพธ์ผู้เรียนที่วัดได้จริง พร้อมไฟล์หลักฐานที่ตรวจสอบย้อนหลังได้</p>
+        <form action={createAction} className="course-form" encType="multipart/form-data">
           <label>หมวดหลักฐาน
-            <select name="category" defaultValue="learning_design">
+            <select name="category" defaultValue="learning_design" style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }}>
               <option value="learning_design">แผนการสอน</option>
               <option value="learning_activity">กิจกรรมการเรียนรู้</option>
               <option value="student_outcome">ผลลัพธ์ผู้เรียน</option>
@@ -61,36 +61,39 @@ export function EvidenceForm({ evidences }: { evidences: PaEvidence[] }) {
               <option value="professional_development">พัฒนาวิชาชีพ</option>
             </select>
           </label>
-          <label>ชื่อหลักฐาน<input name="title" required /></label>
-          <label>ตัวชี้วัด วPA<input name="indicator_code" placeholder="เช่น วPA 1.2" /></label>
-          <label>ปีการศึกษา<input name="academic_year" type="number" defaultValue={2569} required /></label>
-          <label>คำแนะนำเพิ่มเติมสำหรับรายการนี้
-            <input name="advice_note" placeholder="เช่น แนบ Before/After ของผู้เรียน" />
+          <label>ชื่อหลักฐาน<input name="title" required style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }} /></label>
+          <label>ตัวชี้วัด วPA<input name="indicator_code" placeholder="เช่น วPA 1.2" style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }} /></label>
+          <label>ปีการศึกษา<input name="academic_year" type="number" defaultValue={2569} required style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }} /></label>
+          <label>แนบไฟล์เอกสารหลักฐาน (รูปภาพ หรือ PDF)
+            <input name="file" type="file" accept="image/*,application/pdf" style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)", padding: "8px" }} />
           </label>
-          <label>รายละเอียดหลักฐาน<textarea name="description" rows={4} required /></label>
+          <label>คำแนะนำเพิ่มเติมสำหรับรายการนี้
+            <input name="advice_note" placeholder="เช่น แนบ Before/After ของผู้เรียน" style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }} />
+          </label>
+          <label>รายละเอียดหลักฐาน<textarea name="description" rows={4} required style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }} /></label>
           <button className="landing-primary" type="submit" disabled={createPending}>บันทึกหลักฐาน</button>
           {createState.message ? <p className="form-message">{createState.message}</p> : null}
         </form>
       </article>
 
-      <article className="course-item">
-        <h3>ดูแลและอนุมัติหลักฐาน</h3>
-        <p>Workflow: ร่าง {"->"} ส่งตรวจ {"->"} ต้องแก้ไข {"->"} อนุมัติแล้ว</p>
+      <article className="course-item cyber-glass-card">
+        <h3 className="neon-text-indigo">ดูแลและอนุมัติหลักฐาน</h3>
+        <p style={{ color: "#94a3b8" }}>Workflow: ร่าง {"->"} ส่งตรวจ {"->"} ต้องแก้ไข {"->"} อนุมัติแล้ว</p>
         <form action={statusAction} className="course-form">
           <label>เลือกรายการหลักฐาน
-            <select name="evidence_id" required defaultValue="">
-              <option value="" disabled>เลือกหลักฐาน</option>
+            <select name="evidence_id" required defaultValue="" style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <option value="" disabled style={{ color: "#94a3b8" }}>เลือกหลักฐาน</option>
               {rows.map((e) => <option value={e.id} key={e.id}>{e.title}</option>)}
             </select>
           </label>
           <label>สถานะถัดไป
-            <select name="next_status" defaultValue="submitted">
+            <select name="next_status" defaultValue="submitted" style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }}>
               <option value="submitted">ส่งตรวจ</option>
               <option value="revision_required">ต้องแก้ไข</option>
               <option value="approved">อนุมัติแล้ว</option>
             </select>
           </label>
-          <label>คอมเมนต์ผู้ตรวจ<textarea name="reviewer_comment" rows={3} /></label>
+          <label>คอมเมนต์ผู้ตรวจ<textarea name="reviewer_comment" rows={3} style={{ background: "rgba(15, 23, 42, 0.6)", color: "#fff", border: "1px solid rgba(255,255,255,0.08)" }} /></label>
           <button className="landing-primary" type="submit" disabled={statusPending}>อัปเดตสถานะ</button>
           {statusState.message ? <p className="form-message">{statusState.message}</p> : null}
         </form>

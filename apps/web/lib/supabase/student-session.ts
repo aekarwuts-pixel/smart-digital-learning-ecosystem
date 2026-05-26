@@ -9,6 +9,7 @@ import { hasSupabaseEnv } from "@/lib/env";
 
 export type StudentSessionData = {
   id: string;
+  profile_id: string | null;
   student_code: string;
   first_name: string;
   last_name: string;
@@ -31,7 +32,7 @@ export async function getStudentSession(): Promise<StudentSessionData | null> {
   const adminSupabase = createAdminClient();
   const { data, error } = await adminSupabase
     .from("students")
-    .select("id, student_code, first_name, last_name, grade_level, room, school_id")
+    .select("id, profile_id, student_code, first_name, last_name, grade_level, room, school_id")
     .eq("id", studentId)
     .maybeSingle();
 

@@ -48,11 +48,26 @@ function getLocalBehaviorEvidences(): PaEvidence[] {
   return list;
 }
 
+function getLocalPaEvidences(): PaEvidence[] {
+  try {
+    const filePath = path.join(process.cwd(), "local-pa-evidences.json");
+    if (fs.existsSync(filePath)) {
+      const fileData = fs.readFileSync(filePath, "utf8");
+      return JSON.parse(fileData) as PaEvidence[];
+    }
+  } catch (err) {
+    console.error("Error reading local PA evidences:", err);
+  }
+  return [];
+}
+
 export async function getPaEvidences(): Promise<PaEvidence[]> {
   const localBehaviorEvidences = getLocalBehaviorEvidences();
+  const localPaEvidences = getLocalPaEvidences();
+  const allLocal = [...localBehaviorEvidences, ...localPaEvidences];
 
   if (!hasSupabaseEnv()) {
-    return [...localBehaviorEvidences, ...demoEvidences];
+    return [...allLocal, ...demoEvidences];
   }
 
   const supabase = await createClient();
@@ -81,7 +96,7 @@ export async function getPaEvidences(): Promise<PaEvidence[]> {
     .maybeSingle<{ id: string }>();
 
   if (!teacher) {
-    return [...localBehaviorEvidences, ...demoEvidences];
+    return [...allLocal, ...demoEvidences];
   }
 
   const { data } = await supabase
@@ -95,8 +110,8 @@ export async function getPaEvidences(): Promise<PaEvidence[]> {
     .returns<PaEvidence[]>();
 
   const dbEvidences = data?.length ? data : demoEvidences;
-  // Merge dynamic local behavior evidences with database ones (so local changes show up on preview screen instantly)
-  return [...localBehaviorEvidences, ...dbEvidences];
+  // Merge dynamic local evidences with database ones
+  return [...allLocal, ...dbEvidences];
 }
 
 

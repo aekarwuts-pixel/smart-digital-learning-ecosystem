@@ -3,6 +3,8 @@
  * Server-side database queries for the Student Dashboard.
  */
 import { createAdminClient } from "@/lib/supabase/admin";
+import { fetchBehaviorLogs } from "@/app/app/students/behavior/actions";
+import type { BehaviorLogItem } from "@/app/app/students/behavior/actions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -36,11 +38,13 @@ export type StudentDashboardData = {
   courses: StudentCourse[];
   recentAssignments: StudentAssignmentItem[];
   recentAttendance: StudentAttendanceItem[];
+  behaviorLogs: BehaviorLogItem[];
   stats: {
     totalCourses: number;
     pendingAssignments: number;
     averageScore: number | null;
     attendanceRate: number | null;
+    behaviorPoints: number;
   };
 };
 
@@ -161,15 +165,20 @@ export async function getStudentDashboard(studentId: string): Promise<StudentDas
   const attendanceRate =
     totalAttendance > 0 ? Math.round((attendedCount / totalAttendance) * 100) : null;
 
+  const behaviorLogs = await fetchBehaviorLogs([studentId]);
+  const behaviorPoints = behaviorLogs.reduce((sum, l) => sum + l.points, 0);
+
   return {
     courses,
     recentAssignments,
     recentAttendance,
+    behaviorLogs,
     stats: {
       totalCourses: courses.length,
       pendingAssignments,
       averageScore: averageScore !== null ? Math.round(averageScore * 10) / 10 : null,
-      attendanceRate
+      attendanceRate,
+      behaviorPoints
     }
   };
 }

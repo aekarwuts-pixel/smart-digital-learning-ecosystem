@@ -9,10 +9,17 @@ export type PaActionState = { message: string };
 
 const ok = (message: string): PaActionState => ({ message });
 
+import { uploadFileToStorage } from "@/lib/supabase/storage";
+
 export async function createPaEvidence(_prev: PaActionState, formData: FormData): Promise<PaActionState> {
-  if (!hasSupabaseEnv()) return ok("Demo mode: ยังไม่เชื่อมฐานข้อมูลจริง");
-  const context = await getTeacherContext();
-  if (!context) return ok("ไม่พบบัญชีครูในระบบ");
+  const isDemo = !hasSupabaseEnv();
+  let context = { teacherId: "demo-teacher-id", profileId: "demo-profile-id" };
+
+  if (!isDemo) {
+    const activeContext = await getTeacherContext();
+    if (!activeContext) return ok("ไม่พบบัญชีครูในระบบ");
+    context = activeContext;
+  }
 
   const category = String(formData.get("category") ?? "learning_design");
   const title = String(formData.get("title") ?? "").trim();
@@ -20,6 +27,7 @@ export async function createPaEvidence(_prev: PaActionState, formData: FormData)
   const academicYear = Number(formData.get("academic_year") ?? 2569);
   const advice = String(formData.get("advice_note") ?? "").trim();
   const detail = String(formData.get("description") ?? "").trim();
+  const file = formData.get("file") as File | null;
 
   if (!title) return ok("กรุณากรอกชื่อหลักฐาน");
   if (!detail) return ok("กรุณากรอกรายละเอียดหลักฐาน");
@@ -28,17 +36,60 @@ export async function createPaEvidence(_prev: PaActionState, formData: FormData)
   const reviewerComment = "";
   const mergedDescription = `${detail}\n\n[workflow]\nstatus=${status}\nreviewer_comment=${reviewerComment}\nadvice=${advice}`;
 
+  // If in Demo Mode
+  if (isDemo) {
+    // Return early simulated success
+    revalidatePath("/app");
+    revalidatePath("/app/pa");
+    return ok("เพิ่มหลักฐานเรียบร้อย (โหมดจำลอง Demo)");
+  }
+
   const supabase = await createClient();
-  const { error } = await supabase.from("pa_evidences").insert({
-    teacher_id: context.teacherId,
-    category,
-    title,
-    description: mergedDescription,
-    indicator_code: indicator || null,
-    academic_year: academicYear,
-    evidence_date: new Date().toISOString().slice(0, 10)
-  });
-  if (error) return ok(error.message);
+
+  // 1. Insert PA Evidence
+  const { data: evidenceRow, error: evidenceError } = await supabase
+    .from("pa_evidences")
+    .insert({
+      teacher_id: context.teacherId,
+      category,
+      title,
+      description: mergedDescription,
+      indicator_code: indicator || null,
+      academic_year: academicYear,
+      evidence_date: new Date().toISOString().slice(0, 10)
+    })
+    .select("id")
+    .single<{ id: string }>();
+
+  if (evidenceError || !evidenceRow) {
+    return ok(`ล้มเหลวในการบันทึกหลักฐาน: ${evidenceError?.message}`);
+  }
+
+  // 2. Handle File upload if attached
+  if (file && file.size > 0) {
+    const uploadRes = await uploadFileToStorage(
+      "pa-evidences",
+      `teachers/${context.teacherId}`,
+      file,
+      context.profileId
+    );
+
+    if (uploadRes.success && uploadRes.fileId) {
+      // Link the uploaded file metadata to this evidence record
+      const { error: linkError } = await supabase
+        .from("pa_evidence_files")
+        .insert({
+          evidence_id: evidenceRow.id,
+          file_id: uploadRes.fileId
+        });
+
+      if (linkError) {
+        console.error("Failed to link file to evidence:", linkError.message);
+      }
+    } else {
+      console.warn("Storage upload warn/failure:", uploadRes.message);
+    }
+  }
 
   revalidatePath("/app");
   revalidatePath("/app/pa");

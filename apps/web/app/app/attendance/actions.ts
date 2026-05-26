@@ -1,9 +1,36 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import fs from "fs";
+import path from "path";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getTeacherContext } from "@/lib/queries/courses";
+
+const localSessionsPath = path.join(process.cwd(), "local-attendance-sessions.json");
+
+function readLocalJson<T>(filePath: string): T[] {
+  try {
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, "utf8");
+      return JSON.parse(data) as T[];
+    }
+  } catch (err) {
+    console.error(`Error reading ${filePath}:`, err);
+  }
+  return [];
+}
+
+function writeLocalJson<T>(filePath: string, data: T[]): boolean {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+    return true;
+  } catch (err) {
+    console.error(`Error writing to ${filePath}:`, err);
+    return false;
+  }
+}
+
 
 export type AttendanceActionResponse = {
   success: boolean;

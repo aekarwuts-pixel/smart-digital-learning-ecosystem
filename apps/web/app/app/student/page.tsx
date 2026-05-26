@@ -68,11 +68,48 @@ const demoDashboard: StudentDashboardData = {
   courses: demoCourses,
   recentAssignments: demoAssignments,
   recentAttendance: demoAttendance,
+  behaviorLogs: [
+    {
+      id: "demo-b1",
+      student_id: "demo",
+      student_name: "ปกรณ์ ใจดี",
+      teacher_id: "demo-teacher",
+      category: "positive",
+      title: "มีจิตสาธารณะช่วยครูจัดห้องเรียนคอมพิวเตอร์",
+      description: "ช่วยทำความสะอาดและจัดระเบียบสายไฟเครื่องคอมพิวเตอร์ในห้องปฏิบัติการ 1",
+      points: 10,
+      log_date: new Date(Date.now() - 86400000).toISOString().split("T")[0],
+      is_exported_to_pa: true,
+      pa_evidence_id: "demo-pa1",
+      parent_acknowledged: true,
+      parent_acknowledged_at: new Date(Date.now() - 86400000).toISOString(),
+      parent_comment: "ภูมิใจในตัวลูกครับ",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: "demo-b2",
+      student_id: "demo",
+      student_name: "ปกรณ์ ใจดี",
+      teacher_id: "demo-teacher",
+      category: "home_visit",
+      title: "บันทึกการเยี่ยมบ้านนักเรียนภาคเรียนที่ 1",
+      description: "ผู้ปกครองให้การต้อนรับอย่างดี ได้พูดคุยแนวทางดูแลเรื่องการทำงานค้างร่วมกัน",
+      points: 0,
+      log_date: new Date(Date.now() - 86400000 * 5).toISOString().split("T")[0],
+      is_exported_to_pa: true,
+      pa_evidence_id: "demo-pa2",
+      parent_acknowledged: false,
+      parent_acknowledged_at: null,
+      parent_comment: null,
+      created_at: new Date().toISOString()
+    }
+  ],
   stats: {
     totalCourses: 1,
     pendingAssignments: 1,
     averageScore: 80,
-    attendanceRate: 92
+    attendanceRate: 92,
+    behaviorPoints: 10
   }
 };
 
@@ -97,7 +134,7 @@ export default async function StudentDashboardPage() {
   }
 
   return (
-    <main className="phone-shell">
+    <main className="phone-shell cyber-shell">
       <StudentClient
         student={student}
         dashData={dashData}

@@ -25,12 +25,12 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
   const reasonBanner = getReasonBanner(reason);
 
   return (
-    <main style={styles.root}>
+    <main style={styles.root} className="cyber-shell">
       {/* Background blobs */}
       <div style={styles.blob1} aria-hidden />
       <div style={styles.blob2} aria-hidden />
 
-      <div style={styles.card}>
+      <div style={styles.card} className="cyber-glass-card">
         {/* Logo */}
         <div style={styles.logoWrap}>
           <div style={styles.logoCircle}>
@@ -38,7 +38,7 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
           </div>
           <div>
             <p style={styles.logoSub}>M Learning Ecosystem</p>
-            <p style={styles.logoTitle}>ระบบการเรียนรู้ดิจิทัล</p>
+            <p style={styles.logoTitle} className="neon-text-indigo">ระบบการเรียนรู้ดิจิทัล</p>
           </div>
         </div>
 
@@ -47,15 +47,15 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
           <div style={{
             ...styles.banner,
             background: reasonBanner.type === "error"
-              ? "rgba(239,68,68,0.10)" : "rgba(245,158,11,0.10)",
-            borderColor: reasonBanner.type === "error" ? "#ef4444" : "#f59e0b",
-            color: reasonBanner.type === "error" ? "#dc2626" : "#b45309",
+              ? "rgba(239,68,68,0.15)" : "rgba(245,158,11,0.15)",
+            borderColor: reasonBanner.type === "error" ? "#f87171" : "#fbbf24",
+            color: reasonBanner.type === "error" ? "#f87171" : "#fbbf24",
           }}>
             {reasonBanner.text}
           </div>
         )}
         {isDemoMode && (
-          <div style={{ ...styles.banner, background: "rgba(99,102,241,0.08)", borderColor: "#818cf8", color: "#4f46e5" }}>
+          <div style={{ ...styles.banner, background: "rgba(99,102,241,0.15)", borderColor: "#818cf8", color: "#818cf8" }}>
             🎮 โหมด Demo — ข้อมูลเป็นตัวอย่างเท่านั้น
           </div>
         )}
@@ -69,6 +69,7 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
             aria-selected={loginMode === "staff"}
             style={{ ...styles.tab, ...(loginMode === "staff" ? styles.tabActive : {}) }}
             onClick={() => setLoginMode("staff")}
+            className="tab-btn"
           >
             <span style={styles.tabIcon}>🏫</span> บุคลากร
           </button>
@@ -79,8 +80,9 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
             aria-selected={loginMode === "student"}
             style={{ ...styles.tab, ...(loginMode === "student" ? styles.tabActive : {}) }}
             onClick={() => setLoginMode("student")}
+            className="tab-btn"
           >
-            <span style={styles.tabIcon}>🎒</span> นักเรียน
+            <span style={styles.tabIcon}>🎒</span> นักเรียน & ผู้ปกครอง
           </button>
         </div>
 
@@ -123,7 +125,7 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
               </div>
             </div>
 
-            <button id="btn-staff-login" type="submit" disabled={pending} style={styles.submitBtn}>
+            <button id="btn-staff-login" type="submit" disabled={pending} style={styles.submitBtn} className="btn-hover">
               {pending ? (
                 <><span style={styles.spinner} /> กำลังเข้าสู่ระบบ...</>
               ) : "เข้าสู่ระบบ"}
@@ -131,7 +133,7 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
           </form>
         ) : (
           /* Student Form */
-          <form action={formAction} style={styles.form} aria-label="เข้าสู่ระบบนักเรียน">
+          <form action={formAction} style={styles.form} aria-label="เข้าสู่ระบบนักเรียนและผู้ปกครอง">
             <input type="hidden" name="login_type" value="student" />
 
             <div style={styles.fieldGroup}>
@@ -167,7 +169,7 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
               </div>
             </div>
 
-            <button id="btn-student-login" type="submit" disabled={pending} style={{ ...styles.submitBtn, background: "linear-gradient(135deg, #059669, #10b981)" }}>
+            <button id="btn-student-login" type="submit" disabled={pending} style={{ ...styles.submitBtn, background: "linear-gradient(135deg, #059669, #10b981)" }} className="btn-hover">
               {pending ? (
                 <><span style={styles.spinner} /> กำลังเข้าสู่ระบบ...</>
               ) : "เข้าสู่ระบบ"}
@@ -201,17 +203,22 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
 
         input:focus {
           outline: none;
-          border-color: #6366f1 !important;
-          box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+          border-color: #818cf8 !important;
+          box-shadow: 0 0 0 3px rgba(129,140,248,0.25) !important;
         }
 
-        button:not([disabled]):hover {
-          filter: brightness(1.08);
+        .btn-hover:not([disabled]):hover {
+          filter: brightness(1.15);
           transform: translateY(-1px);
         }
 
-        button:not([disabled]):active {
+        .btn-hover:not([disabled]):active {
           transform: translateY(0);
+        }
+
+        .tab-btn:hover {
+          color: #f1f5f9 !important;
+          background: rgba(255,255,255,0.03) !important;
         }
 
         @keyframes spin {
@@ -221,6 +228,19 @@ export function LoginForm({ isDemoMode, reason }: { isDemoMode: boolean; reason?
         @keyframes fadeSlideUp {
           from { opacity: 0; transform: translateY(16px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cyber grid overlay on login */
+        .cyber-shell::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+          background-size: 20px 20px;
+          pointer-events: none;
+          z-index: 0;
         }
       `}</style>
     </main>
@@ -235,8 +255,9 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "linear-gradient(135deg, #eef2ff 0%, #f0fdf4 50%, #eff6ff 100%)",
-    fontFamily: "'Sarabun', sans-serif",
+    background: "radial-gradient(circle at top, #0f172a 0%, #030712 100%)",
+    color: "#f1f5f9",
+    fontFamily: "'Outfit', 'Sarabun', sans-serif",
     padding: "1rem",
     position: "relative",
     overflow: "hidden",
@@ -246,7 +267,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "420px",
     height: "420px",
     borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(129,140,248,0.25) 0%, transparent 70%)",
+    background: "radial-gradient(circle, rgba(129,140,248,0.18) 0%, transparent 70%)",
     top: "-80px",
     left: "-100px",
     pointerEvents: "none",
@@ -256,7 +277,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "360px",
     height: "360px",
     borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(52,211,153,0.20) 0%, transparent 70%)",
+    background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)",
     bottom: "-60px",
     right: "-80px",
     pointerEvents: "none",
@@ -265,14 +286,15 @@ const styles: Record<string, React.CSSProperties> = {
     position: "relative",
     width: "100%",
     maxWidth: "400px",
-    background: "rgba(255,255,255,0.85)",
+    background: "rgba(30, 41, 59, 0.5)",
     backdropFilter: "blur(24px)",
     WebkitBackdropFilter: "blur(24px)",
     borderRadius: "24px",
     padding: "2rem 2rem 1.5rem",
-    boxShadow: "0 8px 40px rgba(99,102,241,0.10), 0 2px 8px rgba(0,0,0,0.06)",
-    border: "1px solid rgba(255,255,255,0.9)",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+    border: "1px solid rgba(255,255,255,0.08)",
     animation: "fadeSlideUp 0.4s ease both",
+    zIndex: 1,
   },
   logoWrap: {
     display: "flex",
@@ -288,18 +310,18 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "0 4px 12px rgba(99,102,241,0.35)",
+    boxShadow: "0 0 12px rgba(99,102,241,0.5)",
     flexShrink: 0,
   },
   logoLetter: {
     color: "#fff",
-    fontWeight: 700,
+    fontWeight: 900,
     fontSize: "1.4rem",
     lineHeight: 1,
   },
   logoSub: {
     fontSize: "0.72rem",
-    color: "#6366f1",
+    color: "#818cf8",
     fontWeight: 600,
     margin: 0,
     letterSpacing: "0.05em",
@@ -307,8 +329,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   logoTitle: {
     fontSize: "0.95rem",
-    color: "#1e293b",
-    fontWeight: 700,
+    fontWeight: 800,
     margin: "0.1rem 0 0",
   },
   banner: {
@@ -318,16 +339,17 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "0.82rem",
     marginBottom: "1rem",
     lineHeight: 1.5,
-    fontWeight: 500,
+    fontWeight: 600,
   },
   tabRow: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
     gap: "0.5rem",
-    background: "#f1f5f9",
+    background: "rgba(15, 23, 42, 0.6)",
     borderRadius: "12px",
     padding: "0.3rem",
     marginBottom: "1.5rem",
+    border: "1px solid rgba(255,255,255,0.08)",
   },
   tab: {
     border: "none",
@@ -335,10 +357,10 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "0.6rem 0.5rem",
     fontSize: "0.85rem",
     fontFamily: "'Sarabun', sans-serif",
-    fontWeight: 500,
+    fontWeight: 600,
     cursor: "pointer",
     background: "transparent",
-    color: "#64748b",
+    color: "#94a3b8",
     transition: "all 0.2s ease",
     display: "flex",
     alignItems: "center",
@@ -346,10 +368,11 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "0.35rem",
   },
   tabActive: {
-    background: "#fff",
-    color: "#4f46e5",
+    background: "rgba(99, 102, 241, 0.15)",
+    color: "#818cf8",
     fontWeight: 700,
-    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+    border: "1px solid rgba(99, 102, 241, 0.25)",
+    boxShadow: "inset 0 0 10px rgba(99,102,241,0.1)",
   },
   tabIcon: {
     fontSize: "1rem",
@@ -368,7 +391,7 @@ const styles: Record<string, React.CSSProperties> = {
   label: {
     fontSize: "0.8rem",
     fontWeight: 600,
-    color: "#374151",
+    color: "#94a3b8",
     letterSpacing: "0.02em",
   },
   inputWrap: {
@@ -386,12 +409,12 @@ const styles: Record<string, React.CSSProperties> = {
   input: {
     width: "100%",
     padding: "0.7rem 0.85rem 0.7rem 2.5rem",
-    border: "1.5px solid #e2e8f0",
+    border: "1.5px solid rgba(255, 255, 255, 0.15)",
     borderRadius: "10px",
     fontSize: "0.9rem",
     fontFamily: "'Sarabun', sans-serif",
-    background: "#f8fafc",
-    color: "#1e293b",
+    background: "rgba(15, 23, 42, 0.4)",
+    color: "#fff",
     transition: "border-color 0.2s, box-shadow 0.2s",
   },
   submitBtn: {
@@ -407,7 +430,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     cursor: "pointer",
     transition: "all 0.2s ease",
-    boxShadow: "0 4px 14px rgba(99,102,241,0.35)",
+    boxShadow: "0 4px 14px rgba(99,102,241,0.3)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -427,10 +450,10 @@ const styles: Record<string, React.CSSProperties> = {
   errorMsg: {
     marginTop: "0.85rem",
     padding: "0.65rem 0.85rem",
-    background: "rgba(239,68,68,0.08)",
-    border: "1px solid rgba(239,68,68,0.25)",
+    background: "rgba(239,68,68,0.15)",
+    border: "1px solid rgba(239,68,68,0.3)",
     borderRadius: "10px",
-    color: "#dc2626",
+    color: "#f87171",
     fontSize: "0.82rem",
     fontWeight: 500,
     lineHeight: 1.5,
@@ -444,12 +467,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   footerLink: {
     fontSize: "0.75rem",
-    color: "#94a3b8",
+    color: "#64748b",
     textDecoration: "none",
     transition: "color 0.15s",
   },
   footerDot: {
-    color: "#cbd5e1",
+    color: "rgba(255,255,255,0.15)",
     fontSize: "0.75rem",
   },
 };
